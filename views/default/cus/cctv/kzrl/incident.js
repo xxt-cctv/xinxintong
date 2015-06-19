@@ -5,7 +5,7 @@ app.config(['$locationProvider', function ($lp) {
 app.controller('ctrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
     var id = $location.search().id, url = '/rest/cus/cctv/kzrl/get?articleid=' + id;
     window.kzrlGeo.onLocationReady = function (lat, lng) {
-        if (lat && lat.length && lng && lng.length) {
+        if (lat !== undefined && lng !== undefined) {
             url += '&lat=' + lat;
             url += '&lng=' + lng;
         }

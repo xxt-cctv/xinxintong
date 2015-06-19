@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html ng-app='kzrl' ng-controller='ctrl' ng-cloak class='ng-cloak'>
+<html ng-app='kzrl' ng-controller='ctrl'>
     
     <head>
         <meta charset="utf-8">
         <title ng-bind='incident.title'></title>
+        <style type="text/css">
+            .ng-cloak{display:none}
+        </style>
     </head>
     
-    <body>
+    <body ng-cloak class='ng-cloak'>
         <div ng-bind="incident.title"></div>
         <div ng-bind="incident.summary"></div>
         <div ng-bind="incident.pic"></div>
         <div ng-bind="incident.body"></div>
         <div ng-bind="incident.distance"></div>
+        <div ng-if="incident&&incident.distance===undefine">没有获得地理坐标</div>
         <button ng-click='openNearby()'>查询周边的事件</button>
         <script src='/static/js/angular.min.js'></script>
         <script src='geo.js'></script>

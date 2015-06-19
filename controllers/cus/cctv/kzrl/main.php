@@ -50,7 +50,7 @@ class main extends \xxt_base {
             "a.id=$articleid and a.id=e.article_id"
         );
         $article = $this->model()->query_obj_ss($q);
-        if ($lat !== null && $lng === null) {
+        if ($lat !== null && $lng !== null) {
             $distance = $this->calcDistance($lng, $lat, $article->occured_lng, $article->occured_lat);
             $article->distance = $distance;    
         }

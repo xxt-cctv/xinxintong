@@ -1,3 +1,4 @@
+window.setLocationYsxw = function (lng, lat) { };
 var app = angular.module('kzrl', []);
 app.controller('ctrl', ['$scope', '$http', function ($scope, $http) {
     $scope.openOne = function (incident) {

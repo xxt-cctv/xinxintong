@@ -1,3 +1,4 @@
+window.setLocationYsxw = function (lng, lat) { };
 var app = angular.module('kzrl', []);
 app.config(['$locationProvider', function ($lp) {
 	$lp.html5Mode(true);

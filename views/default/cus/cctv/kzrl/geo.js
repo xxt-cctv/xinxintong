@@ -1,6 +1,6 @@
 (function () {
     var geoSuccessCallback = function (position) {
-        window.kzrlGeo.onLocationReady && typeof window.kzrlGeo.onLocationReady === 'function' && window.kzrlGeo.onLocactionReady(position.coords.latitude, position.coords.longitude);
+        window.kzrlGeo.onLocationReady && typeof window.kzrlGeo.onLocationReady === 'function' && window.kzrlGeo.onLocationReady(position.coords.latitude, position.coords.longitude);
     };
     var geoErrorCallback = function (error) {
         var e;
@@ -18,7 +18,7 @@
                 e = "An unknown error occurred.";
                 break;
         }
-        window.kzrlGeo.onLocationFail && typeof window.kzrlGeo.onLocationFail === 'function' && window.kzrlGeo.onLocactionFail(e);
+        window.kzrlGeo.onLocationFail && typeof window.kzrlGeo.onLocationFail === 'function' && window.kzrlGeo.onLocationFail(e);
     };
     var requestGeoPosition = function () {
         var nav, geoloc;
@@ -26,7 +26,7 @@
         if (nav !== null) {
             geoloc = nav.geolocation;
             if (geoloc !== null) {
-                geoloc.getCurrentPosition(geoSuccessCallback, geoErrorCallback);
+                geoloc.getCurrentPosition(geoSuccessCallback, geoErrorCallback, { timeout: 1000 });
             } else {
                 window.kzrlGeo.onLocationFail && typeof window.kzrlGeo.onLocationFail === 'function' && window.kzrlGeo.onLocactionFail("Geolocation API is not supported in your browser");
             }
@@ -40,6 +40,7 @@
             window.setLocationYsxw = function (lng, lat) {
                 window.kzrlGeo.onLocationReady && typeof window.kzrlGeo.onLocationReady === 'function' && window.kzrlGeo.onLocactionReady(lat, lng);
             };
+            window.addEventListener('load', function () { window.position.setLocationInfo(); }, false);
         } else if (/MicroMessenger/i.test(navigator.userAgent)) {
             window.addEventListener('load', function () { requestGeoPosition(); }, false);
         } else if (/YiXin/i.test(navigator.userAgent)) {
