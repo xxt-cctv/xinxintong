@@ -45,11 +45,10 @@ class main extends \xxt_base {
     public function get_action($articleid, $lat=null, $lng=null)
     {
         $q = array(
-            'a.title,a.summary,a.pic,a.body,a.weight,e.occured_time,e.occured_lat,e.occured_lng',
+            'a.id,a.title,a.summary,a.pic,a.body,a.weight,e.occured_time,e.occured_lat,e.occured_lng',
             'xxt_article a, xxt_article_extinfo e',
-            "a.id=e.article_id"
+            "a.id=$articleid and a.id=e.article_id"
         );
-        
         $article = $this->model()->query_obj_ss($q);
         if ($lat !== null && $lng === null) {
             $distance = $this->calcDistance($lng, $lat, $article->occured_lng, $article->occured_lat);
@@ -69,7 +68,7 @@ class main extends \xxt_base {
         $month = date('n', $current);
         
         $q = array(
-            'a.title,a.summary,a.weight,e.occured_time',
+            'a.id,a.title,a.summary,a.weight,e.occured_time',
             'xxt_article a, xxt_article_extinfo e',
             "a.id=e.article_id and e.occured_month=$month and e.occured_day=$day"
         );
@@ -110,7 +109,7 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'B') {
             $q = array(
-                'a.title,a.summary,a.weight,e.occured_time',
+                'a.id,a.title,a.summary,a.weight,e.occured_time',
                 'xxt_article a, xxt_article_extinfo e',
                 "a.id=e.article_id and (e.occured_month<$month or (e.occured_month=$month and e.occured_day<=$day))"
             );
@@ -129,7 +128,7 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'F') {
             $q = array(
-                'a.title,a.summary,a.weight,e.occured_time',
+                'a.id,a.title,a.summary,a.weight,e.occured_time',
                 'xxt_article a, xxt_article_extinfo e',
                 "a.id=e.article_id and (e.occured_month>$month or (e.occured_month=$month and e.occured_day>$day))"
             );
@@ -151,7 +150,7 @@ class main extends \xxt_base {
     public function nearby_action($articleid, $size=10)
     {
         $q = array(
-            'a.title,a.summary,a.weight,e.occured_time,d.distance',
+            'a.id,a.title,a.summary,a.weight,e.occured_time,d.distance',
             'xxt_article a, xxt_article_extinfo e, xxt_article_ext_distance d',
             "a.id=$articleid and a.id=e.article_id and a.id=d.article_id_a"
         );
@@ -167,7 +166,7 @@ class main extends \xxt_base {
     /**
      *
      */
-    public function import_action($mpid='c4a663165e2198f7bb411ce30dca91e5', $cleanExistent = 'Y')
+    public function import_action($mpid='ad483481fb907d53d74130cd88e11d86', $cleanExistent = 'Y')
     {
         if ($cleanExistent === 'Y') {
             $this->model()->delete('xxt_article', "mpid='$mpid' and creater='import'");
@@ -182,22 +181,11 @@ class main extends \xxt_base {
         /**
          * handle data.
          */
+        //$picurl = 'http://'.$_SERVER['HTTP_HOST'];
+        $picurl = '/kcfinder/upload/'.$mpid.'/图片/抗战日历';
+        
         $current = time();
         for ($row = 0; ($record = fgetcsv($file)) != false; $row++) {
-            $a = array(
-                'mpid' => $mpid,
-                'pic' => '', //本地的存储路径
-                'url' => '',
-                'title' => $record[1],
-                'summary' => $record[2],
-                'create_at' => $current,
-                'modify_at' => $current,
-                'body' => $record[5],
-                'creater' => 'import',
-                'creater_name' => 'import'
-            );
-            $articleid = $this->model()->insert('xxt_article', $a, true);
-            $ei = array();
             /**
              * date
              */
@@ -213,6 +201,23 @@ class main extends \xxt_base {
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
             $occured_point = str_replace(array('北纬','南纬','东经','西经','°'), array('','-',',',',-','.'), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
+            /**
+             *
+             */
+            $a = array(
+                'mpid' => $mpid,
+                'pic' => $picurl.'/'.sprintf("%'.02d", $mon).'/'.$record[0].'.jpg',
+                'url' => '',
+                'title' => $record[1],
+                'summary' => $record[2],
+                'create_at' => $current,
+                'modify_at' => $current,
+                'body' => $record[5],
+                'creater' => 'import',
+                'creater_name' => 'import'
+            );
+            $articleid = $this->model()->insert('xxt_article', $a, true);
+            $ei = array();
             $ei = array(
                 'article_id' => $articleid,
                 'occured_time' => $occured_time,
