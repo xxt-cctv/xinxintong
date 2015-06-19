@@ -166,8 +166,10 @@ class main extends \xxt_base {
     /**
      *
      */
-    public function import_action($mpid='ad483481fb907d53d74130cd88e11d86', $cleanExistent = 'Y')
+    public function import_action($mpid, $cleanExistent = 'Y')
     {
+        empty($mpid) && die('mpid is emtpy.');
+        
         if ($cleanExistent === 'Y') {
             $this->model()->delete('xxt_article', "mpid='$mpid' and creater='import'");
             $this->model()->delete('xxt_article_extinfo', '1=1');
