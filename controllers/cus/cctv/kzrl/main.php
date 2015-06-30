@@ -68,7 +68,7 @@ class main extends \xxt_base {
         $month = date('n', $current);
         
         $q = array(
-            'a.id,a.title,a.summary,a.weight,e.occured_time',
+            'a.id,a.title,a.summary,a.pic,a.weight,e.occured_time,e.occured_year',
             'xxt_article a, xxt_article_extinfo e',
             "a.id=e.article_id and e.occured_month=$month and e.occured_day=$day"
         );
@@ -109,7 +109,7 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'B') {
             $q = array(
-                'a.id,a.title,a.summary,a.weight,e.occured_time',
+                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year',
                 'xxt_article a, xxt_article_extinfo e',
                 "a.id=e.article_id and (e.occured_month<$month or (e.occured_month=$month and e.occured_day<=$day))"
             );
@@ -128,7 +128,7 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'F') {
             $q = array(
-                'a.id,a.title,a.summary,a.weight,e.occured_time',
+                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year',
                 'xxt_article a, xxt_article_extinfo e',
                 "a.id=e.article_id and (e.occured_month>$month or (e.occured_month=$month and e.occured_day>$day))"
             );
