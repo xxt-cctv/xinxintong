@@ -25,7 +25,7 @@ class tag_model extends TMS_MODEL {
         $q = array(
             '*',
             'xxt_member_tag',
-            "mpid='$mpid' and authapi_id=$authid"
+            "authapi_id=$authid"
         );
 
         $tags = $this->query_objs_ss($q);
@@ -46,6 +46,21 @@ class tag_model extends TMS_MODEL {
         $tag = $this->query_obj_ss($q);
 
         return $tag;
+    }
+    /**
+     * 获得指定认证接口下的标签
+     */
+    public function byAuthid($authid, $fields='*')
+    {
+        $q = array(
+            $fields,
+            'xxt_member_tag',
+            "authapi_id=$authid"
+        );
+
+        $tags = $this->query_objs_ss($q);
+
+        return $tags;
     }
     /**
      * 添加标签
