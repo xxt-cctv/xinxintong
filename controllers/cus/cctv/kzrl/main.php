@@ -199,7 +199,7 @@ class main extends \xxt_base {
             /**
              * location
              */
-            $occured_point = trim($record[4]);
+            $occured_point = trim($record[5]);
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
             $occured_point = str_replace(array('北纬','南纬','东经','西经','°'), array('','-',',',',-','.'), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
@@ -214,7 +214,7 @@ class main extends \xxt_base {
                 'summary' => $record[2],
                 'create_at' => $current,
                 'modify_at' => $current,
-                'body' => $record[5],
+                'body' => $record[6],
                 'creater' => 'import',
                 'creater_name' => 'import'
             );
@@ -227,7 +227,8 @@ class main extends \xxt_base {
                 'occured_month' => $mon,
                 'occured_day' =>$day,
                 'occured_lat' => $lat,
-                'occured_lng' => $lng    
+                'occured_lng' => $lng,    
+                'occured_palace' => $record[4]    
             );
             $this->model()->insert('xxt_article_extinfo', $ei, false);
         }
