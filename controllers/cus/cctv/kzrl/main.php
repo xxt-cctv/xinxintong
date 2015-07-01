@@ -166,7 +166,7 @@ class main extends \xxt_base {
     /**
      *
      */
-    public function import_action($mpid, $cleanExistent = 'Y')
+    public function import_action($mpid, $cleanExistent = 'N')
     {
         empty($mpid) && die('mpid is emtpy.');
         
@@ -228,7 +228,7 @@ class main extends \xxt_base {
                 'occured_day' =>$day,
                 'occured_lat' => $lat,
                 'occured_lng' => $lng,    
-                'occured_palace' => $record[4]    
+                'occured_place' => $record[4]    
             );
             $this->model()->insert('xxt_article_extinfo', $ei, false);
         }

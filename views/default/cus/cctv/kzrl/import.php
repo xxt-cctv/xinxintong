@@ -7,7 +7,7 @@
     </head>
     
     <body>
-        <form method='post' action='/rest/cus/cctv/kzrl/import?cleanExistent=Y&mpid=<?php echo $_GET["mpid"];?>' enctype="multipart/form-data">
+        <form method='post' action='/rest/cus/cctv/kzrl/import?cleanExistent=<?php echo $_GET["cleanExistent"];?>&mpid=<?php echo $_GET["mpid"];?>' enctype="multipart/form-data">
             <input type='file' name='kzrl'>
             <button type='submit'>导入</button>
         </form>
