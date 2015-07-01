@@ -164,7 +164,7 @@ class main extends \xxt_base {
         return new \ResponseData($nearbys);
     }
     /**
-     *
+     * 导入事件数据
      */
     public function import_action($mpid, $cleanExistent = 'N')
     {
@@ -175,7 +175,7 @@ class main extends \xxt_base {
             $this->model()->delete('xxt_article_extinfo', '1=1');
             $this->model()->delete('xxt_article_ext_distance', '1=1');
         }
-        //solving: Maximum execution time of 30 seconds exceeded
+        
         @set_time_limit(0);
 
         if (!($file = fopen($_FILES['kzrl']['tmp_name'], "r")))
@@ -183,8 +183,7 @@ class main extends \xxt_base {
         /**
          * handle data.
          */
-        //$picurl = 'http://'.$_SERVER['HTTP_HOST'];
-        $picurl = '/kcfinder/upload/'.$mpid.'/图片/抗战日历';
+        $picurl = 'http://'.$_SERVER['HTTP_HOST'].'/kcfinder/upload/'.$mpid.'/图片/抗战日历';
         
         $current = time();
         for ($row = 0; ($record = fgetcsv($file)) != false; $row++) {
@@ -201,8 +200,12 @@ class main extends \xxt_base {
              */
             $occured_point = trim($record[5]);
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
-            $occured_point = str_replace(array('北纬','南纬','东经','西经','°'), array('','-',',',',-','.'), $occured_point);
+            $occured_point = str_replace(array('北纬','南纬','东经','西经','°','′','″'), array('','-',',',',-','|','|',''), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
+            $lats = explode('|', $lat);
+            $lat = (int)$lats[0] + $lats[1] / 60 + $lats[2] / 3600;
+            $lngs = explode('|', $lng);
+            $lng = (int)$lngs[0] + $lngs[1] / 60 + $lngs[2] / 3600;
             /**
              *
              */
@@ -241,12 +244,13 @@ class main extends \xxt_base {
         return new \ResponseData($row);
     }
     /**
-     *
+     * 计算事件之间的距离
      */
     public function precalc_action($count=5)
     {
-        //solving: Maximum execution time of 30 seconds exceeded
         @set_time_limit(0);
+
+        $this->model()->delete('xxt_article_ext_distance', '1=1');
 
         $q = array(
             'e.article_id id,e.occured_lng lng,e.occured_lat lat',
@@ -256,6 +260,7 @@ class main extends \xxt_base {
         $all2 = $all;
         foreach ($all as $a) {
             foreach ($all2 as $b) {
+                if ($a->id === $b->id) continue;
                 $d = $this->calcDistance($a->lng, $a->lat, $b->lng, $b->lat);
                 $this->model()->insert(
                     'xxt_article_ext_distance', 
