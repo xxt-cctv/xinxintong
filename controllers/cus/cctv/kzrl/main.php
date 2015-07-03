@@ -45,7 +45,7 @@ class main extends \xxt_base {
     public function get_action($articleid, $lat=null, $lng=null)
     {
         $q = array(
-            'a.id,a.title,a.summary,a.pic,a.body,a.weight,e.occured_time,e.occured_lat,e.occured_lng',
+            'a.id,a.title,a.summary,a.pic,a.body,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day,e.occured_place,e.occured_lat,e.occured_lng',
             'xxt_article a, xxt_article_extinfo e',
             "a.id=$articleid and a.id=e.article_id"
         );
@@ -68,7 +68,7 @@ class main extends \xxt_base {
         $month = date('n', $current);
         
         $q = array(
-            'a.id,a.title,a.summary,a.pic,a.weight,e.occured_time,e.occured_year',
+            'a.id,a.title,a.summary,a.pic,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
             'xxt_article a, xxt_article_extinfo e',
             "a.id=e.article_id and e.occured_month=$month and e.occured_day=$day"
         );
@@ -93,6 +93,19 @@ class main extends \xxt_base {
         
         if ($articleid === null) {
             $start = time();
+            $month = date('n', $start);
+            $q = array(
+                'occured_time,ABS( occured_day -2 ) days',
+                'xxt_article_extinfo', 
+                "occured_month=$month"
+            );
+            $q2 = array(
+                'o' => 'days',
+                'r' => array('o'=>0, 'l'=>1),
+            );
+            $lastest = $this->model()->query_objs_ss($q, $q2);
+            $lastest = $lastest[0];
+            $start = $lastest->occured_time; 
         } else {
             $q = array(
                 'e.occured_time',
@@ -109,9 +122,9 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'B') {
             $q = array(
-                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year',
+                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
                 'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and (e.occured_month<$month or (e.occured_month=$month and e.occured_day<=$day))"
+                "a.id=e.article_id and e.occured_time<=$start"
             );
             $q2 = array(
                 'o'=>'e.occured_time desc',
@@ -128,9 +141,9 @@ class main extends \xxt_base {
          */
         if ($direction === 'T' || $direction === 'F') {
             $q = array(
-                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year',
+                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
                 'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and (e.occured_month>$month or (e.occured_month=$month and e.occured_day>$day))"
+                "a.id=e.article_id and e.occured_time>$start"
             );
             $q2 = array(
                 'o'=>'e.occured_time asc',
@@ -150,13 +163,13 @@ class main extends \xxt_base {
     public function nearby_action($articleid, $size=10)
     {
         $q = array(
-            'a.id,a.title,a.summary,a.weight,e.occured_time,d.distance',
+            'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day,d.distance',
             'xxt_article a, xxt_article_extinfo e, xxt_article_ext_distance d',
-            "a.id=$articleid and a.id=e.article_id and a.id=d.article_id_a"
+            "d.article_id_a=$articleid and a.id=e.article_id and a.id=d.article_id_b"
         );
         $q2 = array(
-            'o'=>'d.distance asc',
-            'r'=>array('o'=>0,'l'=>$size)
+            'o' => 'd.distance asc',
+            'r' => array('o' => 0, 'l' => $size)
         );
         
         $nearbys = $this->model()->query_objs_ss($q, $q2);
@@ -188,6 +201,10 @@ class main extends \xxt_base {
         $current = time();
         for ($row = 0; ($record = fgetcsv($file)) != false; $row++) {
             /**
+             * remove BOM
+             */
+            $row === 0 && $record[0] = preg_replace('/\xEF\xBB\xBF/', '', $record[0]);
+            /**
              * date
              */
             $occured_time = $record[3];
@@ -200,11 +217,11 @@ class main extends \xxt_base {
              */
             $occured_point = trim($record[5]);
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
-            $occured_point = str_replace(array('北纬','南纬','东经','西经','°','′','″'), array('','-',',',',-','|','|',''), $occured_point);
+            $occured_point = str_replace(array('北纬','南纬','东经','西经'), array('','-',',',',-'), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
-            $lats = explode('|', $lat);
+            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lat, $lats) && die('error: '.$record[0].': '.$lat);
             $lat = (int)$lats[0] + $lats[1] / 60 + $lats[2] / 3600;
-            $lngs = explode('|', $lng);
+            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lng, $lngs) && die('error: '.$record[0].': '.$lng);
             $lng = (int)$lngs[0] + $lngs[1] / 60 + $lngs[2] / 3600;
             /**
              *
