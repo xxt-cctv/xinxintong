@@ -110,32 +110,13 @@ class main extends \xxt_base {
             $q = array(
                 'e.occured_time',
                 'xxt_article_extinfo e',
-                'e.article_id=$article_id'    
+                "e.article_id=$articleid"    
             );
             $start = $this->model()->query_val_ss($q);
         }
         $day = date('j', $start);
         $month = date('n', $start);
         
-        /**
-         * backwards
-         */
-        if ($direction === 'T' || $direction === 'B') {
-            $q = array(
-                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
-                'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and e.occured_time<=$start"
-            );
-            $q2 = array(
-                'o'=>'e.occured_time desc',
-                'r'=>array('o'=>'0','l'=>$size)
-            );
-            
-            if ($backwards = $this->model()->query_objs_ss($q, $q2)){
-                $backwards = array_reverse($backwards);
-            }
-            $result = $backwards;
-        }
         /**
          * forwards
          */
@@ -150,9 +131,28 @@ class main extends \xxt_base {
                 'r'=>array('o'=>'0','l'=>$size)
             );
             
-            $forwards = $this->model()->query_objs_ss($q, $q2);
+            if ($forwards = $this->model()->query_objs_ss($q, $q2)) {
+                $forwards = array_reverse($forwards);
+            }
+            $result = $forwards;
+        }
+        /**
+         * backwards
+         */
+        if ($direction === 'T' || $direction === 'B') {
+            $q = array(
+                'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
+                'xxt_article a, xxt_article_extinfo e',
+                "a.id=e.article_id and e.occured_time<=$start"
+            );
+            $q2 = array(
+                'o'=>'e.occured_time desc',
+                'r'=>array('o'=>'0','l'=>$size)
+            );
             
-            $result = array_merge($result, $forwards);
+            $backwards = $this->model()->query_objs_ss($q, $q2);
+            
+            $result = array_merge($result, $backwards);
         }
         
         return new \ResponseData($result);
@@ -196,7 +196,7 @@ class main extends \xxt_base {
         /**
          * handle data.
          */
-        $picurl = 'http://'.$_SERVER['HTTP_HOST'].'/kcfinder/upload/'.$mpid.'/图片/抗战日历';
+        $picurl = 'http://'.$_SERVER['HTTP_HOST'].'/kcfinder/upload/'.$mpid.urlencode('/图片/抗战日历');
         
         $current = time();
         for ($row = 0; ($record = fgetcsv($file)) != false; $row++) {
@@ -207,6 +207,7 @@ class main extends \xxt_base {
             /**
              * date
              */
+            empty($record[3]) && die("error[$row]: time empty: " . $record[0]);
             $occured_time = $record[3];
             $occured_time = str_replace(array('年','月'), '/', $occured_time);
             $occured_time = str_replace('日', '', $occured_time);
@@ -219,9 +220,9 @@ class main extends \xxt_base {
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
             $occured_point = str_replace(array('北纬','南纬','东经','西经'), array('','-',',',',-'), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
-            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lat, $lats) && die('error: '.$record[0].': '.$lat);
+            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lat, $lats) && die("error[$row]: ".$record[0].': '.$lat);
             $lat = (int)$lats[0] + $lats[1] / 60 + $lats[2] / 3600;
-            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lng, $lngs) && die('error: '.$record[0].': '.$lng);
+            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lng, $lngs) && die("error[$row]: ".$record[0].': '.$lng);
             $lng = (int)$lngs[0] + $lngs[1] / 60 + $lngs[2] / 3600;
             /**
              *
