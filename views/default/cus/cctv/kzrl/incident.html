@@ -1,25 +1,71 @@
 <!DOCTYPE html>
-<html ng-app='kzrl' ng-controller='ctrl'>
+<html ng-app='kzrl' ng-controller='ctrl' ng-cloak class='ng-cloak'>
     
     <head>
+        <title>抗战日历</title>
         <meta charset="utf-8">
-        <title ng-bind='incident.title'></title>
-        <style type="text/css">
-            .ng-cloak{display:none}
-        </style>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="yes" name="apple-touch-fullscreen" />
+        <meta content="telephone=no" name="format-detection" />
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <link href="incident.css" rel="stylesheet" />
     </head>
-    
-    <body ng-cloak class='ng-cloak'>
-        <div ng-bind="incident.title"></div>
-        <div ng-bind="incident.summary"></div>
-        <div ng-bind="incident.pic"></div>
-        <div ng-bind="incident.body"></div>
-        <div ng-bind="incident.distance"></div>
-        <div ng-if="incident&&incident.distance===undefine">没有获得地理坐标</div>
-        <button ng-click='openNearby()'>查询周边的事件</button>
+    <body style="background-color:#f3f3f3;">
+        <div class="content">
+            <div class="td">
+                <div class="pic">
+                    <img src="/static/img/clock.png" />
+                </div>
+                <div class="text">
+                    <span class="text1">事件已发生</span>
+                    <span class="text2">
+                        <font style="color:#0C0CB8">{{passed}}</font>
+                    </span>
+                    <span class="text1">天</span>
+                </div>
+            </div>
+            <div class="title">{{incident.title}}</div>
+            <p class="source">央视新闻</p>
+            <div class="sum">
+                <div class="sum-style">
+                    <span class="sum1">摘要</span>
+                    <span class="sum2">&nbsp;&nbsp;{{incident.summary}}</span>
+                </div>
+            </div>
+            <div class="cont content-cont">{{incident.body}}</div>
+            <div class="space"></div>
+            <div class="sj"></div>
+            <div ng-show="incident&&incident.distance" class="event">
+                <div class="pic">
+                    <img src="/static/img/location.png" />
+                </div>
+                <div class="distance">{{incident.distance}}米</div>
+                <div class="intro">这是您距离事件发生地
+                    <font style="color:#0C0CB8">{{incident.occured_place}}</font>的距离</div>
+            </div>
+            <div ng-show="!incident.distance" class="event">
+                <div class="pic">
+                    <img src="/static/img/location.png" />
+                </div>
+                <div class="nodistance">没有获得地理坐标</div>
+            </div>
+            <div class="inquiry">
+                <a ng-click='openNearby()' href="#">查看附近战场</a>
+            </div>
+            <div class="footer">本页面由央视新闻网提供</div>
+        </div>
         <script src='/static/js/angular.min.js'></script>
-        <script src='geo.js'></script>
-        <script src='incident.js'></script>
+        <script>
+            if (/MicroMessenger/i.test(navigator.userAgent)) {
+                document.write("<script src='http:\/\/res.wx.qq.com\/open\/js\/jweixin-1.0.0.js'><\/script>");
+                document.write("<script src='\/rest\/mi\/matter\/wxjssdksignpackage?mpid=9f4335dc25ab0a83c04e066793cba286&url="+encodeURIComponent(location.href.split('#')[0])+"'><\/script>");
+            }
+            document.write("<script src='\/static\/js\/xxt.share.js'><\/script>");
+            document.write("<script src='geo.js'><\/script>");
+            document.write("<script src='incident.js'><\/script>");
+        </script>
     </body>
 
 </html>

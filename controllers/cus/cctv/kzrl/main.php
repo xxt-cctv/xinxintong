@@ -60,9 +60,9 @@ class main extends \xxt_base {
     /**
      * 获得历史上今天发生的事件
      */
-    public function today_action()
+    public function today_action($current=null)
     {
-        $current = time();
+        $current === null && $current = time();
         
         $day = date('j', $current);
         $month = date('n', $current);
@@ -87,15 +87,16 @@ class main extends \xxt_base {
      * $direction Backword|Two-way|Forward
      * $size 一个方向上的查找数量
      */
-    public function timeline_action($articleid=null, $direction='T', $size=10)
+    public function timeline_action($articleid=null, $current=null, $direction='T', $size=10)
     {
         $result = array();
         
         if ($articleid === null) {
-            $start = time();
+            $start = $current === null ? time() : $current;
             $month = date('n', $start);
+            $day = date('j', $start);
             $q = array(
-                'occured_time,ABS( occured_day -2 ) days',
+                "occured_time,ABS( occured_day -$day ) days",
                 'xxt_article_extinfo', 
                 "occured_month=$month"
             );
@@ -116,7 +117,6 @@ class main extends \xxt_base {
         }
         $day = date('j', $start);
         $month = date('n', $start);
-        
         /**
          * forwards
          */
@@ -139,23 +139,30 @@ class main extends \xxt_base {
         /**
          * backwards
          */
+        $todayIndex = -1;
         if ($direction === 'T' || $direction === 'B') {
             $q = array(
                 'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
                 'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and e.occured_time<=$start"
+                "a.id=e.article_id and e.occured_time"
             );
+            $q[2] .= $articleid !== null ? "<$start" : "<=$start";
+             
             $q2 = array(
                 'o'=>'e.occured_time desc',
                 'r'=>array('o'=>'0','l'=>$size)
             );
             
             $backwards = $this->model()->query_objs_ss($q, $q2);
+            /**
+             * 按照当前时间获得数据时，需要指定当前天的索引
+             */
+            $direction === 'T' && $todayIndex = count($result);
             
             $result = array_merge($result, $backwards);
         }
         
-        return new \ResponseData($result);
+        return new \ResponseData(array('result'=>$result, 'todayIndex'=>$todayIndex));
     }
     /**
      * 查某一事件附近的事件
