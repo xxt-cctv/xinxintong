@@ -70,7 +70,7 @@ class main extends \xxt_base {
         $q = array(
             'a.id,a.title,a.summary,a.pic,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
             'xxt_article a, xxt_article_extinfo e',
-            "a.id=e.article_id and e.occured_month=$month and e.occured_day=$day"
+            "a.id=e.article_id and a.state=1 and e.occured_month=$month and e.occured_day=$day"
         );
         $q2 = array(
             'o'=>'e.occured_time desc'
@@ -124,7 +124,7 @@ class main extends \xxt_base {
             $q = array(
                 'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
                 'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and e.occured_time>$start"
+                "a.id=e.article_id and a.state=1 and e.occured_time>$start"
             );
             $q2 = array(
                 'o'=>'e.occured_time asc',
@@ -144,7 +144,7 @@ class main extends \xxt_base {
             $q = array(
                 'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day',
                 'xxt_article a, xxt_article_extinfo e',
-                "a.id=e.article_id and e.occured_time"
+                "a.id=e.article_id and a.state=1 and e.occured_time"
             );
             $q[2] .= $articleid !== null ? "<$start" : "<=$start";
              
@@ -172,7 +172,7 @@ class main extends \xxt_base {
         $q = array(
             'a.id,a.title,a.summary,a.weight,e.occured_time,e.occured_year,e.occured_month,e.occured_day,d.distance',
             'xxt_article a, xxt_article_extinfo e, xxt_article_ext_distance d',
-            "d.article_id_a=$articleid and a.id=e.article_id and a.id=d.article_id_b"
+            "d.article_id_a=$articleid and a.id=e.article_id and a.state=1 and a.id=d.article_id_b"
         );
         $q2 = array(
             'o' => 'd.distance asc',
@@ -203,7 +203,7 @@ class main extends \xxt_base {
         /**
          * handle data.
          */
-        $picurl = 'http://'.$_SERVER['HTTP_HOST'].'/kcfinder/upload/'.$mpid.urlencode('/图片/抗战日历');
+        $picurl = 'http://xxt.ctsi.com.cn/kcfinder/upload/'.$mpid.urlencode('/图片/抗战日历');
         
         $current = time();
         for ($row = 0; ($record = fgetcsv($file)) != false; $row++) {
@@ -227,10 +227,10 @@ class main extends \xxt_base {
             $occured_point = str_replace(array('\'',' '), '', $occured_point);
             $occured_point = str_replace(array('北纬','南纬','东经','西经'), array('','-',',',',-'), $occured_point);
             list($lat, $lng) = explode(',', $occured_point);
-            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lat, $lats) && die("error[$row]: ".$record[0].': '.$lat);
-            $lat = (int)$lats[0] + $lats[1] / 60 + $lats[2] / 3600;
-            !preg_match('/(\d+)\S+(\d+)\S+(\d+)/', $lng, $lngs) && die("error[$row]: ".$record[0].': '.$lng);
-            $lng = (int)$lngs[0] + $lngs[1] / 60 + $lngs[2] / 3600;
+            !preg_match('/(\d+)\D+(\d+)\D+(\d+)/', $lat, $lats) && die("error[$row]: ".$record[0].': '.$lat);
+            $lat = (int)$lats[1] + (($lats[2] * 60 + $lats[3]) / 3600);
+            !preg_match('/(\d+)\D+(\d+)\D+(\d+)/', $lng, $lngs) && die("error[$row]: ".$record[0].': '.$lng);
+            $lng = (int)$lngs[1] + (($lngs[2] * 60 + $lngs[3]) / 3600);
             /**
              *
              */

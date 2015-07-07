@@ -11,7 +11,17 @@
         <meta content="black" name="apple-mobile-web-app-status-bar-style">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
         <link href="incident.css" rel="stylesheet" />
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
     </head>
+    
     <body style="background-color:#f3f3f3;">
         <div class="content">
             <div class="td">
@@ -31,10 +41,10 @@
             <div class="sum">
                 <div class="sum-style">
                     <span class="sum1">摘要</span>
-                    <span class="sum2">&nbsp;&nbsp;{{incident.summary}}</span>
+                    <span class="sum2">{{incident.summary}}</span>
                 </div>
             </div>
-            <div class="cont content-cont">{{incident.body}}</div>
+            <div class="cont content-cont" ng-bind-html='incident.body'></div>
             <div class="space"></div>
             <div class="sj"></div>
             <div ng-show="incident&&incident.distance" class="event">
@@ -54,7 +64,7 @@
             <div class="inquiry">
                 <a ng-click='openNearby()' href="#">查看附近战场</a>
             </div>
-            <div class="footer">本页面由央视新闻网提供</div>
+            <div class="footer">本页由央视新闻提供</div>
         </div>
         <script src='/static/js/angular.min.js'></script>
         <script>
@@ -64,7 +74,7 @@
             }
             document.write("<script src='\/static\/js\/xxt.share.js'><\/script>");
             document.write("<script src='geo.js'><\/script>");
-            document.write("<script src='incident.js'><\/script>");
+            document.write("<script src='incident.js?_=4'><\/script>");
         </script>
     </body>
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html ng-app='kzrl' ng-controller='ctrl' ng-cloak class='ng-cloak'>
+    
     <head>
         <title>抗战日历</title>
         <meta charset="utf-8">
@@ -11,13 +12,27 @@
         <link href="static/css/font-awesome.min.css" rel="stylesheet" />
         <link href="/static/css/swiper.min.css" rel="stylesheet" />
         <link href="today.css?_=2" rel="stylesheet" />
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
     </head>
+    
     <body>
         <div class="bg">
             <img src="static/img/bg1.png" alt="抗战卡片" class="pic">
             <div class="location">
-                <span class="pic1"><img src="static/img/logo.png" /></span>
-                <span class="pic2" ng-click='timelineOpened=true'><img src="static/img/sz.png" /></span>
+                <span class="pic1">
+                    <img src="static/img/logo.png" />
+                </span>
+                <span class="pic2" ng-click='timelineOpened=true'>
+                    <img src="static/img/sz.png" />
+                </span>
             </div>
             <div class="date">
                 <div class="date1">
@@ -87,7 +102,7 @@
                 <img ng-src="{{l.pic}}" />
             </div>
             <div class="bt">
-                <h4>重读抗战家书</h4>
+                <h4>{{l.tags[0].title}}</h4>
             </div>
             <div class="bt1">
                 <a href="" target="_blank" ng-bind='l.title'></a>
@@ -98,7 +113,14 @@
         <script src="/static/js/jquery.min.js"></script>
         <script src='/static/js/angular.min.js'></script>
         <script src="/static/js/swiper.min.js"></script>
-        <script src='today.js?_=5'></script>
+        <script>
+            if (/MicroMessenger/i.test(navigator.userAgent)) {
+                document.write("<script src='http:\/\/res.wx.qq.com\/open\/js\/jweixin-1.0.0.js'><\/script>");
+                document.write("<script src='\/rest\/mi\/matter\/wxjssdksignpackage?mpid=9f4335dc25ab0a83c04e066793cba286&url="+encodeURIComponent(location.href.split('#')[0])+"'><\/script>");
+            }
+            document.write("<script src='\/static\/js\/xxt.share.js'><\/script>");
+            document.write("<script src='today.js?_=2'><\/script>");
+        </script>
     </body>
 
 </html>
