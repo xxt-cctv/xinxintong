@@ -50,7 +50,7 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         'offsetDays': Math.ceil((Date.parse('2015/9/3') - jsToday.getTime()) / 86400000)
     };
     $scope.gotoArticle = function (article) {
-        location.href = '/rest/mi/matter?type=article&id=' + article.id + '&mpid=ad483481fb907d53d74130cd88e11d86';
+        location.href = '/rest/mi/matter?type=article&id=' + article.id + '&mpid=9f4335dc25ab0a83c04e066793cba286';
     };
     $scope.gotoIncident = function (incident) {
         location.href = '/views/default/cus/cctv/kzrl/incident.html?id=' + incident.id;
@@ -102,7 +102,7 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         }
 
     });
-    $http.get('/rest/mi/matter/byNews?id=1').success(function (rsp) {
+    $http.get('/rest/mi/matter/byNews?mpid=9f4335dc25ab0a83c04e066793cba286&id=1').success(function (rsp) {
         $scope.letters = rsp.data;
     });
     var fetchTimeline = function (direction) {
