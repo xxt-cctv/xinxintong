@@ -71,7 +71,7 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         $http.get(url);
     };
     $http.get(todayUrl).success(function (rsp) {
-        window.xxt.share.set("【抗战日历】", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
+        window.xxt.share.set("用时间凝固记忆 用距离丈量历史", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
         for (var i = 0; i < rsp.data.length; i++) {
             var summary = rsp.data[i].summary;
             rsp.data[i].summary = summary.substr(0, 20) + "...";
