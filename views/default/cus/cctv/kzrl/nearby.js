@@ -8,9 +8,10 @@ app.controller('ctrl', ['$scope', '$http', '$location', function ($scope, $http,
 	$scope.openOne = function (incident) {
 		location.href = '/views/default/cus/cctv/kzrl/incident.html?id=' + incident.id;
 	};
+	$http.get('/rest/cus/cctv/kzrl/get?articleid=' + id).success(function (rsp) {
+		$scope.center = rsp.data;
+	});
 	$http.get(url).success(function (rsp) {
-		var date = new Date();
-		
 		$scope.incidents = rsp.data;
 	});
 }]);

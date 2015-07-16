@@ -10,7 +10,7 @@ img{-webkit-tap-highlight-color:rgba(0,0,0,0);}
 .sum .sum-style .sum1{color:#eae2dd;background-color:#5f2302;font-size:0.8em;width:40px;height:25px;line-height:25px;display:inline-block;text-align:center;}
 .sum .sum-style .sum2{text-indent:20px;}
 .footer{text-align:center;color:#bcbcbe;font-size:0.8em;margin-top:50px;margin-bottom:40px;}
-.bg{width:100%;-background-image:url(../img/bg1.png);z-index:980;background-size£º100% 300px;height:300px;position:relative;}
+.bg{width:100%;-background-image:url(../img/bg1.png);z-index:980;background-sizeï¿½ï¿½100% 300px;height:300px;position:relative;}
 .bg .pic{width:100%;position: absolute;height:300px;}
 .close{position:absolute;top:25px;right:40px;z-index: 1001;}
 .close img{width:25px;margin-left:-20px;display:block;margin-top:-3px;}
@@ -21,8 +21,8 @@ img{-webkit-tap-highlight-color:rgba(0,0,0,0);}
 .location{position:relative;top:-20px;}
 .location .pic1{width:60%;padding-left:5%;margin-top:15px;position:absolute;top:15px;}
 .location .pic1 img{vertical-align:middle;float:left;width:110px;}
-.location .pic2{right:30px;position:absolute;margin-top:55px;}
-.location .pic2 img{vertical-align:middle;position: absolute;top: -15px;right: 0px;display:block;width:30px;}
+.location .pic2{border: 1px solid #fff;-moz-border-radius: 15px;-webkit-border-radius: 15px;border-radius: 15px;color: #fff;font-size: 13px;margin-top: 35px;padding: 5px 10px;position: absolute;right: 25px;}
+.location .pic2 img{position: absolute;right: 0px;display:block;width:138px;height:36px;}
 /*date*/
 .date{width:100%;margin:auto;position:relative;top:100px;}
 .date .date1{color:#fff;width:100%;left:0px;text-align: center;}
@@ -77,10 +77,10 @@ img{-webkit-tap-highlight-color:rgba(0,0,0,0);}
     #todays .swiper-slide .incident-cont{ left: 201px;}
 }
 #todays .swiper-slide .incident-cont .rq > h4 {
-    background-color:#5f2302;color:#fff;font-size:12px;width:80%;border-radius:5px;line-height:20px;text-align: center;text-align: center;margin: 6px; margin-left: 2px;
+    background-color:#5f2302;color:#fff;font-size:14px;width:80%;border-radius:5px;line-height:24px;text-align: center;text-align: center;margin: 6px; margin-left: 2px;
 }
 #todays .swiper-slide .incident-cont .title{
-    color:#33363b;font-size:1.2em;line-height:18px;margin-top:19px;
+    color:#33363b;font-size:1.2em;line-height:18px;margin-top:12px;
 }
 #todays .swiper-slide .incident-cont .summary{
     color:#868d9b;font-size:1em;line-height:28px;text-overflow: ellipsis;overflow: hidden;  white-space: nowrap;
