@@ -296,4 +296,24 @@ class main extends \xxt_base {
         
         return new \ResponseData('ok');
     }
+    /**
+     * 文章点赞
+     *
+     * $mpid
+     * $id article's id.
+     * $s
+     */
+    public function score_action($id, $s=1)
+    {
+        $random = mt_rand(5 * $s, 20 * $s);
+        $score = $random;
+        $this->model()->update("update xxt_article set score=score+$score where id='$id'");
+        $praised = true;
+        /**
+         * 获得点赞的总数
+         */
+        $article = $this->model('matter\article')->byId($id, 'score');
+
+        return new \ResponseData(array($article->score, $praised));
+    }
 }
