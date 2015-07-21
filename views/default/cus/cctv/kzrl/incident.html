@@ -65,6 +65,8 @@
             <div class="inquiry">
                 <a ng-click='openNearby()' href="#">查看周边抗战事件</a>
             </div>
+            <div class="assist-a" ng-show='!isAssist' ng-click="clickAssist()">历史铭记心间，点赞即是致敬</div>
+        		<div class="assist-b" ng-show='isAssist'>有<font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</div>
             <div class="footer">本页由央视新闻提供</div>
         </div>
         <script src='/static/js/angular.min.js'></script>

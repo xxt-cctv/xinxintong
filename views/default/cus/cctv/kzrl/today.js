@@ -30,11 +30,10 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         timelineSwiper,
         current,
         todayUrl,
-        timelineUrl;
-
+        timelineUrl,
+		
     todayUrl = '/rest/cus/cctv/kzrl/today';
     timelineUrl = '/rest/cus/cctv/kzrl/timeline';
-
     if (undefined !== $location.search().current) {
         current = $location.search().current;
         jsToday.setTime(current * 1000);
@@ -172,4 +171,11 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
             });
         });
     });
+    $scope.isAssist=false;
+    $scope.clickAssist = function (){
+    	$http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+    		$scope.isAssist=true;
+        $scope.assistCount = rsp.data[0];
+    	});
+    }
 });

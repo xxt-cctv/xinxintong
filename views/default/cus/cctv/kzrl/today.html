@@ -99,6 +99,8 @@
                 <i class="fa fa-chevron-right"></i>
             </span>
         </div>
+       <div class="assist-a" ng-show='!isAssist' ng-click="clickAssist()">历史铭记心间，点赞即是致敬</div>
+        <div class="assist-b" ng-show='isAssist'>有<font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</div>
         <div class="letter" ng-repeat='l in letters' ng-click="gotoArticle(l)">
             <div class="t-img">
                 <img ng-src="{{l.pic}}" />

@@ -46,4 +46,11 @@ app.controller('ctrl', ['$scope', '$http', '$location', '$sce', function ($scope
     $scope.openNearby = function () {
         location.href = '/views/default/cus/cctv/kzrl/nearby.html?id=' + id;
     };
+     $scope.isAssist=false;
+    $scope.clickAssist = function (){
+    	$http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+    		$scope.isAssist=true;
+        $scope.assistCount = rsp.data[0];
+    	});
+    }
 }]);
