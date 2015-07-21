@@ -69,7 +69,13 @@
                     case 'input':
                     case 'radio':
                     case 'checkbox':
-                        title = schema.match(/\btitle=\".*?\"/).pop().replace('title=', '').replace(/\"/g, '');
+                        title = schema.match(/\btitle=\".*?\"/);
+                        try {
+                            title = title.pop().replace('title=', '').replace(/\"/g, '');
+                        } catch (e) {
+                            alert('登记项数据格式错误，请检查');
+                            console.log('eee:' + schema, e);
+                        }
                         if (schema.match(/(<textarea|type=\"text\")/)) {
                             if (modelId = extractModelId(schema))
                                 defs[modelId] = { id: modelId, title: title, type: type };
@@ -187,6 +193,7 @@
                             break;
                         case 'radio':
                         case 'checkbox':
+                        case 'option':
                             html += '<div class="form-group"><label>' + s.title + '</label><p class="form-control-static">{{r.data.' + s.id + '}}</p></div>';
                             break;
                         case 'img':
@@ -470,7 +477,7 @@
                         auth.attr_name[0] === '0' && (authAttrs.push({ id: 'name', label: '姓名' }));
                         auth.attr_mobile[0] === '0' && (authAttrs.push({ id: 'mobile', label: '手机' }));
                         auth.attr_email[0] === '0' && (authAttrs.push({ id: 'email', label: '邮箱' }));
-                        auth.extattr.length && (authAttrs = authAttrs.concat(auth.extattr));
+                        auth.extattr && auth.extattr.length && (authAttrs = authAttrs.concat(auth.extattr));
                         $scope.authAttrs = authAttrs;
                     };
                 }],
@@ -488,21 +495,37 @@
         };
         $scope.$on('tinymce.wrap.select', function (event, wrap) {
             $scope.$apply(function () {
+                var root = wrap;
+                while (root.parentNode) root = root.parentNode;
+                $(root).find('.active').removeClass('active');
                 $scope.hasActiveWrap = false;
                 if (wrap.hasAttribute('wrap')) {
-                    $(wrap.parentNode).children('.active').removeClass('active');
                     wrap.classList.add('active');
                     $scope.hasActiveWrap = true;
-                } else {
-                    $(wrap).children('.active').removeClass('active');
                 }
             });
         });
+        $scope.editWrap = function (page) {
+        };
         $scope.removeWrap = function (page) {
             var editor;
             editor = tinymce.get(page.name);
-            $(editor.getBody()).children('.active').remove();
+            $(editor.getBody()).find('.active').remove();
             $scope.hasActiveWrap = false;
+            editor.save();
+        };
+        $scope.upWrap = function (page) {
+            var editor, active;
+            editor = tinymce.get(page.name);
+            active = $(editor.getBody()).find('.active');
+            active.prev().before(active);
+            editor.save();
+        };
+        $scope.downWrap = function (page) {
+            var editor, active;
+            editor = tinymce.get(page.name);
+            active = $(editor.getBody()).find('.active');
+            active.next().after(active);
             editor.save();
         };
         $scope.$on('tinymce.multipleimage.open', function (event, callback) {
