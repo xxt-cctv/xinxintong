@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app='kzrl' ng-controller='ctrl' ng-cloak class='ng-cloak'>
+    <head>
+        <title>抗战日历</title>
+        <meta charset="utf-8">
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="yes" name="apple-touch-fullscreen" />
+        <meta content="telephone=no" name="format-detection" />
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <base href=".">
+        <link href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="http://xxt.ctsi.com.cn/static/css/swiper.min.css" rel="stylesheet" />
+        <link href="today.css" rel="stylesheet" />
+        <script>
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </head>
+    <body>
+        <div class="bg">
+            <img src="http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/bg1.png" alt="抗战卡片" class="pic">
+            <div class="location">
+                <span class="pic1">
+                    <img src="http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/logo.png" />
+                </span>
+                <span class="pic2" ng-click='timelineOpened=true'>+ 抗战时间线</span>
+            </div>
+            <div class="date">
+                <div class="date1">
+                    <span>{{date.date}}</span>
+                    <span>{{date.year}}年
+                        <br>{{date.mon+1}}月
+                        <br>周{{date.day}}
+                        <br>
+                    </span>
+                </div>
+                <div class="position1">
+                    <span style="background:#fff;padding:8px;font-size:1.2em;line-height:30px">距离抗战胜利纪念日阅兵还有
+                        <span style="font-size:1.5em;">{{date.offsetDays}}</span>天</span>
+                </div>
+            </div>
+        </div>
+        <div id='timeline' ng-class="{'opened':timelineOpened}">
+            <div class="box-header">
+                <div class="close" ng-click='timelineOpened=false'>
+                    <img src="http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/close.png" />
+                </div>
+            </div>
+            <div class="box-bottom">
+                <div class="box-year">
+                    <div class="year">
+                        <h3>{{activeIncident.occured_year}}年</h3>
+                    </div>
+                </div>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" ng-repeat='i in incidents' ng-click="gotoIncident(i)">
+                            <div>{{i.occured_month}}月{{i.occured_day}}日</div>
+                            <div>{{i.title}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="todays" ng-show='todays.length'>
+            <div class="swiper-main">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <li class="swiper-slide" ng-repeat="t in todays" ng-click="gotoIncident(t)">
+                            <div class="incident-img">
+                                <imgload pic="{{t.pic}}"></imgload>
+                            </div>
+                            <div class="incident-cont">
+                                <div class="rq">
+                                    <h4>{{t.occured_year}}年{{t.occured_month}}月{{t.occured_day}}日</h4>
+                                </div>
+                                <div class="title">{{t.title}}</div>
+                                <div class="summary">{{t.summary}}</div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <span class='arrow-prev' ng-show='todays.length>1' ng-click='todayPrev()'>
+                <i class="fa fa-chevron-left"></i>
+            </span>
+            <span class='arrow-next' ng-show='todays.length>1' ng-click='todayNext()'>
+                <i class="fa fa-chevron-right"></i>
+            </span>
+        </div>
+        <div class="assist-a" ng-show='!isAssist' ng-click="clickAssist()">
+            <i class="fa fa-thumbs-o-up"></i>&nbsp;历史铭记心间，点赞即是致敬</div>
+        <div class="assist-b" ng-show='isAssist'>有
+            <font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</div>
+        <a class="quest" href="http://xxt.ctsi.com.cn/rest/app/enroll?mpid=9f4335dc25ab0a83c04e066793cba286&aid=55a86349d7f0f">
+            <img src="http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/ti.jpg" />
+        </a>
+        <div class="letter" ng-repeat='l in letters' ng-click="gotoArticle(l)">
+            <div class="t-img">
+                <img ng-src="{{l.pic}}" />
+            </div>
+            <div class="bt">
+                <h4>{{l.tags[0].title}}</h4>
+            </div>
+            <div class="bt1">
+                <a href="" target="_blank" ng-bind='l.title'></a>
+            </div>
+            <div class="sum" ng-bind='l.summary'></div>
+        </div>
+        <div class="footer">本页面由中央电视台提供</div>
+        <script src="http://xxt.ctsi.com.cn/static/js/jquery.min.js"></script>
+        <script src='http://xxt.ctsi.com.cn/static/js/angular.min.js'></script>
+        <script src="http://xxt.ctsi.com.cn/static/js/swiper.min.js"></script>
+        <script src="http://yaotv.qq.com/shake_tv/include/js/jsapi_share.js"></script>
+        <script src='today.js'></script>
+    </body>
+</html>
