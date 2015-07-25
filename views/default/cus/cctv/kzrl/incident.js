@@ -54,5 +54,5 @@ app.controller('ctrl', ['$scope', '$http', '$location', '$sce', function ($scope
             $scope.isAssist = true;
             $scope.assistCount = rsp.data[0];
         });
-    }
+    };
 }]);
