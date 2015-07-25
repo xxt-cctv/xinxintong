@@ -19,21 +19,28 @@ img{-webkit-tap-highlight-color:rgba(0,0,0,0);}
 .incidents{ width: 100%; }
 .incidents div { width: 100%; height: auto; padding: 10px;}
 /*assist*/
-.assist-a{
-	border: 2px solid #5f2302;
-  line-height: 30px;
-  margin: 20px 0px;
-  text-align: center;
-  border-radius: 5px;
-  color:#5f2302;
-  font-weight: bold;
+.assist-box-a,.assist-box-b{
+ margin: 15px 0px;
 }
-.assist-b{
-	background-color:#5f2302;
-	border-radius:5px;
-	line-height: 30px;
-  margin: 20px 0px;
+.assist-box-btn{
+  font-size: 35pt;
+  border: 2px solid #c2bbae;
+  display: flex;
+  border-radius: 50px;
+  width: 90px;
+  height: 90px;
   text-align: center;
-  color:#FFF;
-  font-weight: bold;
+  align-items: center;
+  margin: auto;
+  line-height: 90px;
+}
+.assist-box-btn i,.assist-box-btn i{margin:auto}
+.assist-box-a i{color: #c2bbae;}
+.assist-box-b i{color: #5f2302;}
+.assist-box-a p,.assist-box-b p{
+  margin-top: 5px;
+  font-size: 12pt;
+  text-align: center;
+  color: #5f2302;
+  font-weight: bold;	
 }

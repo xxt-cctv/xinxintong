@@ -1,8 +1,3 @@
-if (/MicroMessenger/i.test(navigator.userAgent)) {
-    signPackage.jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation'];
-    signPackage.debug = false;
-    wx.config(signPackage);
-}
 var app = angular.module('kzrl', []);
 app.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);
@@ -59,20 +54,16 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
     $scope.todayPrev = function () {
         swiperToday !== undefined && swiperToday.slidePrev(true);
     };
-    window.xxt.share.options.descAsTitle = true;
-    window.xxt.share.options.logger = function (shareto) {
-        var url = "/rest/mi/matter/logShare";
-        url += "?shareid=" + (new Date()).getTime();
-        url += "&mpid=ad483481fb907d53d74130cd88e11d86";
-        url += "&id=kzrl-today";
-        url += "&type=other";
-        url += "&title=kzrl-today";
-        url += "&shareto=" + shareto;
-        $http.get(url);
-    };
     $http.get(todayUrl).success(function (rsp) {
         var i, j, one, summary;
-        window.xxt.share.set("用时间凝固记忆 用距离丈量历史", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
+        if (window.shaketv) {
+            window.shaketv.wxShare(
+                "http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/sp.jpg",
+                "用时间凝固记忆 用距离丈量历史",
+                "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天",
+                "http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/today.html"
+                );
+        }
         for (i = 0, j = rsp.data.length; i < j; i++) {
             one = rsp.data[i];
             summary = one.summary;
@@ -103,7 +94,6 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         } else {
             $scope.todays = rsp.data;
         }
-
     });
     $http.get('http://xxt.ctsi.com.cn/rest/mi/matter/byNews?mpid=9f4335dc25ab0a83c04e066793cba286&id=1').success(function (rsp) {
         var i, j;
@@ -181,9 +171,9 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
     });
     $scope.isAssist = false;
     $scope.clickAssist = function () {
-        $http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+        $http.get('http://xxt.ctsi.com.cn/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
             $scope.isAssist = true;
             $scope.assistCount = rsp.data[0];
         });
-    }
+    };
 });

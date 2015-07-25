@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html ng-app='kzrl' ng-controller='ctrl' ng-cloak class='ng-cloak'>
-    
     <head>
         <title>抗战日历</title>
         <meta charset="utf-8">
@@ -11,9 +10,9 @@
         <meta content="black" name="apple-mobile-web-app-status-bar-style">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
         <base href='/views/default/cus/cctv/kzrl/'>
+        <link href="static/css/font-awesome.min.css" rel="stylesheet" />
         <link href="incident.css" rel="stylesheet" />
         <script>
-            var _hmt = _hmt || [];
             (function() {
               var hm = document.createElement("script");
               hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
@@ -22,7 +21,6 @@
             })();
         </script>
     </head>
-    
     <body style="background-color:#f3f3f3;">
         <div class="content">
             <div class="td">
@@ -63,11 +61,21 @@
                 <div class="nodistance">没有获得地理坐标</div>
             </div>
             <div class="inquiry">
-                <a ng-click='openNearby()' href="javascript:void(0)">查看周边抗战事件</a>
+                <a ng-click='openNearby()' href="#">查看周边抗战事件</a>
             </div>
-            <div class="assist-a" ng-show='!isAssist' ng-click="clickAssist()">历史铭记心间，点赞即是致敬</div>
-            <div class="assist-b" ng-show='isAssist'>有
-                <font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</div>
+            <div class="assist-box-a" ng-show='!isAssist' ng-click="clickAssist()">
+                <div class="assist-box-btn">
+                    <i class="fa fa-thumbs-o-up"></i>
+                </div>
+                <p>历史铭记心间，点赞即是致敬</p>
+            </div>
+            <div class="assist-box-b" ng-show='isAssist'>
+                <div class="assist-box-btn">
+                    <i class="fa fa-thumbs-up"></i>
+                </div>
+                <p>有
+                    <font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</p>
+            </div>
             <div class="footer">本页由央视新闻提供</div>
         </div>
         <script src='/static/js/angular.min.js'></script>
@@ -81,5 +89,4 @@
             document.write("<script src='incident.js?_=4'><\/script>");
         </script>
     </body>
-
 </html>

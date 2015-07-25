@@ -78,6 +78,8 @@ class main extends \xxt_base {
         
         $articles = $this->model()->query_objs_ss($q, $q2);
         
+        header( 'Access-Control-Allow-Origin:*');
+        
         return new \ResponseData($articles);
     }
     /**
@@ -161,6 +163,8 @@ class main extends \xxt_base {
             
             $result = array_merge($result, $backwards);
         }
+        
+        header( 'Access-Control-Allow-Origin:*');
         
         return new \ResponseData(array('result'=>$result, 'todayIndex'=>$todayIndex));
     }
@@ -313,6 +317,8 @@ class main extends \xxt_base {
          * 获得点赞的总数
          */
         $article = $this->model('matter\article')->byId($id, 'score');
+
+        header( 'Access-Control-Allow-Origin:*');
 
         return new \ResponseData(array($article->score, $praised));
     }
