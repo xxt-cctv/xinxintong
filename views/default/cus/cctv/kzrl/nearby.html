@@ -14,7 +14,6 @@
         <link href="static/css/font-awesome.min.css" rel="stylesheet" />
         <link href="nearby.css?_=3" rel="stylesheet" />
         <script>
-            var _hmt = _hmt || [];
             (function() {
               var hm = document.createElement("script");
               hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
@@ -42,14 +41,18 @@
                 </div>
             </div>
         </div>
-         <div class="assist-box-a" ng-show='!isAssist' ng-click="clickAssist()">
-            <div class="assist-box-btn"><i class="fa fa-thumbs-o-up"></i></div>
+        <div class="assist-box-a" ng-show='!isAssist' ng-click="clickAssist()">
+            <div class="assist-box-btn">
+                <i class="fa fa-thumbs-o-up"></i>
+            </div>
             <p>历史铭记心间，点赞即是致敬</p>
+        </div>
+        <div class="assist-box-b" ng-show='isAssist'>
+            <div class="assist-box-btn">
+                <i class="fa fa-thumbs-up"></i>
             </div>
-             <div class="assist-box-b" ng-show='isAssist'>
-            <div class="assist-box-btn"><i class="fa fa-thumbs-up"></i></div>
             <p>有<font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</p>
-            </div>
+        </div>
         <script src='/static/js/angular.min.js'></script>
         <script src='nearby.js?_=3'></script>
     </body>

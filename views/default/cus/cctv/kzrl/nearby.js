@@ -14,11 +14,11 @@ app.controller('ctrl', ['$scope', '$http', '$location', function ($scope, $http,
 	$http.get(url).success(function (rsp) {
 		$scope.incidents = rsp.data;
 	});
-	 $scope.isAssist=false;
-    $scope.clickAssist = function (){
-    	$http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
-    		$scope.isAssist=true;
-        $scope.assistCount = rsp.data[0];
-    	});
+	$scope.isAssist = false;
+    $scope.clickAssist = function () {
+		$http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+			$scope.isAssist = true;
+			$scope.assistCount = rsp.data[0];
+		});
     }
 }]);

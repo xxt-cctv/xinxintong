@@ -59,6 +59,7 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
     $scope.todayPrev = function () {
         swiperToday !== undefined && swiperToday.slidePrev(true);
     };
+    window.xxt.share.options.descAsTitle = true;
     window.xxt.share.options.logger = function (shareto) {
         var url = "/rest/mi/matter/logShare";
         url += "?shareid=" + (new Date()).getTime();
