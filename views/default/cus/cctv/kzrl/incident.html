@@ -11,6 +11,7 @@
         <meta content="black" name="apple-mobile-web-app-status-bar-style">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
         <base href='/views/default/cus/cctv/kzrl/'>
+        <link href="static/css/font-awesome.min.css" rel="stylesheet" />
         <link href="incident.css" rel="stylesheet" />
         <script>
             var _hmt = _hmt || [];
@@ -64,6 +65,14 @@
             </div>
             <div class="inquiry">
                 <a ng-click='openNearby()' href="#">查看周边抗战事件</a>
+            </div>
+            <div class="assist-box-a" ng-show='!isAssist' ng-click="clickAssist()">
+            <div class="assist-box-btn"><i class="fa fa-thumbs-o-up"></i></div>
+            <p>历史铭记心间，点赞即是致敬</p>
+            </div>
+             <div class="assist-box-b" ng-show='isAssist'>
+            <div class="assist-box-btn"><i class="fa fa-thumbs-up"></i></div>
+            <p>有<font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</p>
             </div>
             <div class="footer">本页由央视新闻提供</div>
         </div>

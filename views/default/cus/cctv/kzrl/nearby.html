@@ -11,6 +11,7 @@
         <meta content="black" name="apple-mobile-web-app-status-bar-style">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
         <base href='/views/default/cus/cctv/kzrl/'>
+        <link href="static/css/font-awesome.min.css" rel="stylesheet" />
         <link href="nearby.css?_=3" rel="stylesheet" />
         <script>
             var _hmt = _hmt || [];
@@ -41,6 +42,14 @@
                 </div>
             </div>
         </div>
+         <div class="assist-box-a" ng-show='!isAssist' ng-click="clickAssist()">
+            <div class="assist-box-btn"><i class="fa fa-thumbs-o-up"></i></div>
+            <p>历史铭记心间，点赞即是致敬</p>
+            </div>
+             <div class="assist-box-b" ng-show='isAssist'>
+            <div class="assist-box-btn"><i class="fa fa-thumbs-up"></i></div>
+            <p>有<font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</p>
+            </div>
         <script src='/static/js/angular.min.js'></script>
         <script src='nearby.js?_=3'></script>
     </body>

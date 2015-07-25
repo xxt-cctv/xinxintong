@@ -15,6 +15,7 @@ app.controller('ctrl', ['$scope', '$http', '$location', '$sce', function ($scope
         url += "&mpid=ad483481fb907d53d74130cd88e11d86";
         url += "&id=" + id;
         url += "&type=article";
+        url += "&title="+$scope.data.title;
         url += "&shareto=" + shareto;
         $http.get(url);
     };
@@ -46,4 +47,11 @@ app.controller('ctrl', ['$scope', '$http', '$location', '$sce', function ($scope
     $scope.openNearby = function () {
         location.href = '/views/default/cus/cctv/kzrl/nearby.html?id=' + id;
     };
+    $scope.isAssist = false;
+    $scope.clickAssist = function () {
+        $http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+            $scope.isAssist = true;
+            $scope.assistCount = rsp.data[0];
+        });
+    }
 }]);

@@ -14,7 +14,6 @@
         <link href="/static/css/swiper.min.css" rel="stylesheet" />
         <link href="today.css?_=4" rel="stylesheet" />
         <script>
-            var _hmt = _hmt || [];
             (function() {
               var hm = document.createElement("script");
               hm.src = "//hm.baidu.com/hm.js?40ec59c933400d729f57930675635edb";
@@ -31,10 +30,7 @@
                 <span class="pic1">
                     <img src="static/img/logo.png" />
                 </span>
-                <span class="pic2" ng-click='timelineOpened=true'>
-                   + 抗战时间线
-                </span>
-       
+                <span class="pic2" ng-click='timelineOpened=true'>+ 抗战时间线</span>
             </div>
             <div class="date">
                 <div class="date1">
@@ -99,6 +95,11 @@
                 <i class="fa fa-chevron-right"></i>
             </span>
         </div>
+        <div class="assist-a" ng-show='!isAssist' ng-click="clickAssist()">
+            <i class="fa fa-thumbs-o-up"></i>&nbsp;历史铭记心间，点赞即是致敬</div>
+        <div class="assist-b" ng-show='isAssist'>有
+            <font ng-bind="assistCount"></font>人为先辈致敬,纪念亦是传承</div>
+        <a class="quest" href="/rest/app/enroll?mpid=9f4335dc25ab0a83c04e066793cba286&aid=55a86349d7f0f"><img src="static/img/ti.jpg" /></a>
         <div class="letter" ng-repeat='l in letters' ng-click="gotoArticle(l)">
             <div class="t-img">
                 <img ng-src="{{l.pic}}" />
@@ -120,8 +121,8 @@
                 document.write("<script src='http:\/\/res.wx.qq.com\/open\/js\/jweixin-1.0.0.js'><\/script>");
                 document.write("<script src='\/rest\/mi\/matter\/wxjssdksignpackage?mpid=9f4335dc25ab0a83c04e066793cba286&url="+encodeURIComponent(location.href.split('#')[0])+"'><\/script>");
             }
-            document.write("<script src='\/static\/js\/xxt.share.js?_=1'><\/script>");
-            document.write("<script src='today.js?_=5'><\/script>");
+            document.write("<script src='\/static\/js\/xxt.share.js?_=2'><\/script>");
+            document.write("<script src='today.js?_=6'><\/script>");
         </script>
     </body>
 

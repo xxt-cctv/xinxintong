@@ -335,6 +335,8 @@ class matter extends \member_base {
                 $m->tags = $tagModel->tagsByRes($m->id, 'article');            
         }
         
+        header( 'Access-Control-Allow-Origin:*');
+        
         return new \ResponseData($matters);
     }
     /**
