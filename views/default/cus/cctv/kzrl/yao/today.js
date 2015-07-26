@@ -59,8 +59,8 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         if (window.shaketv) {
             window.shaketv.wxShare(
                 "http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/static/img/sp.jpg",
-                "用时间凝固记忆 用距离丈量历史",
-                "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天",
+                "每一天的致敬 每一天的缅怀",
+                "没有一种尊严不需要代价",
                 "http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/today.html"
                 );
         }
