@@ -42,6 +42,9 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         'day': ['天', '一', '二', '三', '四', '五', '六'][jsToday.getDay()],
         'offsetDays': Math.ceil((Date.parse('2015/9/3') - jsToday.getTime()) / 86400000)
     };
+    $scope.gotoQuestion = function () {
+        location.href = 'http://xxt.ctsi.com.cn/rest/app/enroll?mpid=9f4335dc25ab0a83c04e066793cba286&aid=55a86349d7f0f';
+    };
     $scope.gotoArticle = function (article) {
         location.href = 'http://xxt.ctsi.com.cn/rest/mi/matter?type=article&id=' + article.id + '&mpid=9f4335dc25ab0a83c04e066793cba286';
     };
