@@ -147,7 +147,14 @@ class main extends \member_base {
         /**
          * 当前访问用户的基本信息
          */
-        $user = $this->getUser($mpid, $act->authapis, $openid, $act);
+        $user = $this->getUser($mpid, 
+            array(
+                'authapis' => $act->authapis, 
+                'openid' => $openid, 
+                'matter' => $act,
+                'verbose' => array('member' => 'Y', 'fan' => 'Y')
+            )
+        );
         //die(json_encode($user));
         /**
          * 如果没有指定页面，计算应该进入到哪一个状态页
@@ -251,18 +258,23 @@ class main extends \member_base {
         /**
          * 记录日志，完成前置活动再次进入的情况不算
          */
-        $this->model()->update("update xxt_enroll set read_num=read_num+1 where id='$act->id'");  
-        $this->model('log')->writeMatterReadLog(
-            $user->vid, 
-            $mpid, 
-            $act->id, 
-            'enroll',
-            $act->title,
-            $user->openid,
-            $shareby, 
-            $_SERVER['HTTP_USER_AGENT'], 
-            $this->client_ip()
-        );
+        $this->model()->update("update xxt_enroll set read_num=read_num+1 where id='$act->id'");
+        
+        $logUser = new \stdClass;
+        $logUser->vid = $user->vid;
+        $logUser->openid = $user->openid;
+        $logUser->nickname = isset($user->fan) ? $user->fan->nickname : '';
+        
+        $logMatter = new \stdClass;
+        $logMatter->id = $act->id;
+        $logMatter->type = 'enroll';
+        $logMatter->title = $act->title;
+        
+        $logClient = new \stdClass;
+        $logClient->agent = $_SERVER['HTTP_USER_AGENT'];
+        $logClient->ip = $this->client_ip();
+        
+        $this->model('log')->writeMatterRead($mpid, $logUser, $logMatter, $logClient, $shareby);
         
         $this->view_action('/app/enroll/page');
     }
@@ -279,7 +291,13 @@ class main extends \member_base {
         /**
          * 当前访问用户的基本信息
          */
-        $user = $this->getUser($mpid, $act->authapis, null, $act);
+        $user = $this->getUser($mpid, 
+            array(
+                'authapis' => $act->authapis, 
+                'matter' => $act,
+                'verbose' => array('member' => 'Y', 'fan' => 'Y')
+            )
+        );
         $params['user'] = $user;
         /**
          * 登记活动管理员
@@ -384,7 +402,13 @@ class main extends \member_base {
         /**
          * 当前访问用户的基本信息
          */
-        $user = $this->getUser($mpid, $act->authapis, null, $act);
+        $user = $this->getUser($mpid, 
+            array(
+                'authapis' => $act->authapis, 
+                'matter' => $act,
+                'verbose' => array('member' => 'Y', 'fan' => 'Y')
+            )
+        );
         if (empty($user->fan)) {
             /**
              * 非关注用户
