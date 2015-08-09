@@ -59,13 +59,13 @@ class matter extends \member_base {
          */
         switch ($type) {
         case 'article':
-            if (isset($_GET['tpl']) && $_GET['tpl'] === 'std') {
-                \TPL::output('article');
-                exit;
-            } else {
+            //if (isset($_GET['tpl']) && $_GET['tpl'] === 'std') {
+            //    \TPL::output('article');
+            //    exit;
+            //} else {
                 require_once dirname(__FILE__).'/page_article.php';
                 $page = new page_article($id, $ooid, $shareby);
-            }
+            //}
             break;
         case 'news':
         case 'channel':
@@ -269,8 +269,6 @@ class matter extends \member_base {
             if ($m->type === 'article')
                 $m->tags = $tagModel->tagsByRes($m->id, 'article');            
         }
-        
-        header( 'Access-Control-Allow-Origin:*');
         
         return new \ResponseData($matters);
     }
