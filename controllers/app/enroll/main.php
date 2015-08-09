@@ -125,7 +125,7 @@ class main extends \member_base {
             !empty($oPage->ext_js) && \TPL::assign('ext_js', $oPage->ext_js);
             !empty($oPage->ext_css) && \TPL::assign('ext_css', $oPage->ext_css);
             \TPL::assign('title', $act->title);
-            $mpsetting = $this->getCommonSetting($mpid);
+            $mpsetting = $this->getMpSetting($mpid);
             \TPL::assign('body_ele', $mpsetting->body_ele);
             \TPL::assign('body_css', $mpsetting->body_css);
             $this->view_action('/app/enroll/page');
@@ -252,7 +252,7 @@ class main extends \member_base {
          * 全局设置
          */
         \TPL::assign('title', $act->title);
-        $mpsetting = $this->getCommonSetting($mpid);
+        $mpsetting = $this->getMpSetting($mpid);
         \TPL::assign('body_ele', $mpsetting->body_ele);
         \TPL::assign('body_css', $mpsetting->body_css);
         /**
@@ -752,14 +752,16 @@ class main extends \member_base {
     public function myRecords_action($mpid, $aid, $rid='', $orderby='time', $page=1, $size=10)
     {
         $modelEnroll = $this->model('app\enroll');
-
+        
         $act = $modelEnroll->byId($aid);
-
-        list($openid) = $this->getVisitorInfo($mpid, $act);
-
+        
+        $user = $this->getUser($mpid, array('authapis' => $act->authapis));
+        if (!$this->getClientSrc() && empty($user->openid))
+            return new \ResponseError('无法获得用户身份信息');
+        
         $options = array(
-            'creater' => $openid,
-            'visitor' => $openid,
+            'creater' => $user->openid,
+            'visitor' => $user->openid,
             'rid' => $rid,
             'page' => $page,
             'size' => $size,

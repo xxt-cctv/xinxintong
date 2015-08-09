@@ -38,7 +38,7 @@ class article extends \member_base {
         $user->vid = $vid;
         $data['user'] = $user;
         
-        $mpaccount = $this->getCommonSetting($mpid);
+        $mpaccount = $this->getMpSetting($mpid);
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         if (preg_match('/yixin/i', $user_agent)) {
             $modelMpa = $this->model('mp\mpaccount');
@@ -194,5 +194,31 @@ class article extends \member_base {
         }
 
         return new \ResponseData($remark);
+    }
+    /**
+     *
+     */
+    public function attachmentGet_action($mpid, $articleid, $attachmentid)
+    {
+        $q = array(
+            '*', 
+            'xxt_article_attachment', 
+            "article_id='$articleid' and id='$attachmentid'"
+        );
+        $att = $this->model()->query_obj_ss($q);
+        
+        if (strpos($att->url, 'alioss') === 0) {
+            $downloadUrl = 'http://xxt-attachment.oss-cn-shanghai.aliyuncs.com/'.$mpid.'/article/'.$articleid.'/'.urlencode($att->name);
+            $this->redirect($downloadUrl);
+        } else {
+            $fs = $this->model('fs/saestore', $mpid);
+            //header("Content-Type: application/force-download");
+            header("Content-Type: $att->type");
+            header("Content-Disposition: attachment; filename=".$att->name);
+            header('Content-Length: '.$att->size);
+            echo $fs->read($att->url);
+        }
+        
+        exit;
     }
 }
