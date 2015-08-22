@@ -4,15 +4,15 @@ if (/MicroMessenger/i.test(navigator.userAgent)) {
     wx.config(signPackage);
 }
 var app = angular.module('kzrl', []);
-app.config(['$locationProvider', function ($locationProvider) {
+app.config(['$locationProvider', function($locationProvider) {
     $locationProvider.html5Mode(true);
 }]);
-app.directive('imgload', function () {
+app.directive('imgload', function() {
     return {
         restrict: 'E',
-        link: function (scope, elem, attrs) {
+        link: function(scope, elem, attrs) {
             var eleImg = document.createElement('img');
-            eleImg.addEventListener('load', function (evt) {
+            eleImg.addEventListener('load', function(evt) {
                 elem.css('background-image', 'url(' + attrs.pic + ')');
                 if (this.width <= this.height)
                     elem.css('background-size', '100%');
@@ -23,7 +23,7 @@ app.directive('imgload', function () {
         }
     };
 });
-app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
+app.controller('ctrl', function($scope, $timeout, $http, $q, $location) {
     var jsToday = new Date(),
         swiperToday,
         timelineSwiper,
@@ -44,23 +44,24 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         'year': jsToday.getFullYear(),
         'mon': jsToday.getMonth(),
         'date': jsToday.getDate(),
-        'day': ['天', '一', '二', '三', '四', '五', '六'][jsToday.getDay()],
+        'day': ['日', '一', '二', '三', '四', '五', '六'][jsToday.getDay()],
         'offsetDays': Math.ceil((Date.parse('2015/9/3') - jsToday.getTime()) / 86400000)
     };
-    $scope.gotoArticle = function (article) {
+    $scope.gotoArticle = function(article) {
         location.href = 'http://xxt.ctsi.com.cn/rest/mi/matter?type=article&id=' + article.id + '&mpid=9f4335dc25ab0a83c04e066793cba286';
     };
-    $scope.gotoIncident = function (incident) {
+    $scope.gotoIncident = function(incident) {
         location.href = 'http://xxt.ctsi.com.cn/views/default/cus/cctv/kzrl/incident.html?id=' + incident.id;
     };
-    $scope.todayNext = function () {
+    $scope.todayNext = function() {
         swiperToday !== undefined && swiperToday.slideNext(true);
     };
-    $scope.todayPrev = function () {
+    $scope.todayPrev = function() {
         swiperToday !== undefined && swiperToday.slidePrev(true);
     };
     window.xxt.share.options.descAsTitle = true;
-    window.xxt.share.options.logger = function (shareto) {
+    //window.xxt.share.options.descAsTitle = false;
+    window.xxt.share.options.logger = function(shareto) {
         var url = "/rest/mi/matter/logShare";
         url += "?shareid=" + (new Date()).getTime();
         url += "&mpid=ad483481fb907d53d74130cd88e11d86";
@@ -70,9 +71,10 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         url += "&shareto=" + shareto;
         $http.get(url);
     };
-    $http.get(todayUrl).success(function (rsp) {
+    $http.get(todayUrl).success(function(rsp) {
         var i, j, one, summary;
         window.xxt.share.set("用时间凝固记忆 用距离丈量历史", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
+        //window.xxt.share.set("70年前的8月15日 我们迎来日本宣布无条件投降", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
         for (i = 0, j = rsp.data.length; i < j; i++) {
             one = rsp.data[i];
             summary = one.summary;
@@ -86,13 +88,13 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
             rsp.data.splice(0, 0, last);
             rsp.data.push(first);
             $scope.todays = rsp.data;
-            $timeout(function () {
+            $timeout(function() {
                 swiperToday = new Swiper('#todays .swiper-container', {
                     loop: false,
                     initialSlide: 1,
                     slidesPerView: 1,
                     touchMoveStopPropagation: false,
-                    onTransitionEnd: function (swiper) {
+                    onTransitionEnd: function(swiper) {
                         if (swiper.activeIndex === $scope.todays.length - 1)
                             swiper.slideTo(1, 0, false);
                         else if (swiper.activeIndex === 0)
@@ -105,15 +107,16 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         }
 
     });
-    $http.get('http://xxt.ctsi.com.cn/rest/mi/matter/byNews?mpid=9f4335dc25ab0a83c04e066793cba286&id=1').success(function (rsp) {
+    $http.get('http://xxt.ctsi.com.cn/rest/mi/matter/byNews?mpid=9f4335dc25ab0a83c04e066793cba286&id=1').success(function(rsp) {
         var i, j;
         for (i = 0, j = rsp.data.length; i < j; i++) {
             rsp.data[i].pic = 'http://xxt.ctsi.com.cn' + rsp.data[i].pic;
         }
         $scope.letters = rsp.data;
     });
-    var fetchTimeline = function (direction) {
-        var deferred = $q.defer(), promise = deferred.promise;
+    var fetchTimeline = function(direction) {
+        var deferred = $q.defer(),
+            promise = deferred.promise;
         var incident;
         if (direction) {
             if (direction === 'F') {
@@ -125,18 +128,18 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
             timelineUrl += 'articleid=' + incident.id;
             timelineUrl += '&direction=' + direction;
         }
-        $http.get(timelineUrl).success(function (rsp) {
+        $http.get(timelineUrl).success(function(rsp) {
             deferred.resolve(rsp.data);
         });
         return promise;
     };
-    var loadSlides = function (direction) {
+    var loadSlides = function(direction) {
         if (direction === 'F') {
-            fetchTimeline('F').then(function (data) {
+            fetchTimeline('F').then(function(data) {
                 var result = data.result;
                 if (result.length) {
                     $scope.incidents = result.concat($scope.incidents);
-                    $timeout(function () {
+                    $timeout(function() {
                         var activeIndex;
                         activeIndex = timelineSwiper.activeIndex + result.length;
                         timelineSwiper.updateSlidesSize && timelineSwiper.updateSlidesSize();
@@ -145,20 +148,20 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
                 }
             });
         } else if (direction === 'B') {
-            fetchTimeline('B').then(function (data) {
+            fetchTimeline('B').then(function(data) {
                 var result = data.result;
                 if (result.length) {
                     $scope.incidents = $scope.incidents.concat(result);
-                    $timeout(function () {
+                    $timeout(function() {
                         timelineSwiper.updateSlidesSize();
                     });
                 }
             });
         }
     };
-    fetchTimeline().then(function (data) {
+    fetchTimeline().then(function(data) {
         $scope.incidents = data.result;
-        $timeout(function () {
+        $timeout(function() {
             timelineSwiper = new Swiper('#timeline .swiper-container', {
                 slidesPerView: 3,
                 spaceBetween: 20,
@@ -166,8 +169,8 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
                 centeredSlides: true,
                 direction: 'vertical',
                 effect: 'slide',
-                onTransitionEnd: function (swiper) {
-                    $scope.$apply(function () {
+                onTransitionEnd: function(swiper) {
+                    $scope.$apply(function() {
                         $scope.activeIncident = $scope.incidents[swiper.activeIndex];
                         if (swiper.activeIndex <= 3) {
                             loadSlides('F');
@@ -180,8 +183,8 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
         });
     });
     $scope.isAssist = false;
-    $scope.clickAssist = function () {
-        $http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function (rsp) {
+    $scope.clickAssist = function() {
+        $http.get('/rest/cus/cctv/kzrl/score?id=1577').success(function(rsp) {
             $scope.isAssist = true;
             $scope.assistCount = rsp.data[0];
         });
