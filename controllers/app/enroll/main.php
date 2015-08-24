@@ -274,8 +274,8 @@ class main extends \member_base {
 		$logClient->agent = $_SERVER['HTTP_USER_AGENT'];
 		$logClient->ip = $this->client_ip();
 
-		$search = $_SERVER['QUERY_STRING'];
-		$referer = $_SERVER['HTTP_REFERER'];
+		$search = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
+		$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 		$this->model('log')->writeMatterRead($mpid, $logUser, $logMatter, $logClient, $shareby, $search, $referer);
 
 		$this->view_action('/app/enroll/page');
@@ -283,7 +283,7 @@ class main extends \member_base {
 	/**
 	 * 返回活动数据
 	 */
-	public function get_action($mpid, $aid, $page, $ek = null) {
+	public function get_action($mpid, $aid, $rid = null, $page, $ek = null) {
 		$params = array();
 
 		$enrollModel = $this->model('app\enroll');
@@ -320,7 +320,7 @@ class main extends \member_base {
 		/**
 		 * 设置页面登记数据
 		 */
-		list($openedek, $record, $statdata) = $this->getPageData($mpid, $act, $ek, $user->openid, $page, $newForm);
+		list($openedek, $record, $statdata) = $this->getPageData($mpid, $act, $rid, $ek, $user->openid, $page, $newForm);
 		$params['enrollKey'] = $openedek;
 		$params['record'] = $record;
 		$params['statdata'] = $statdata;
@@ -337,7 +337,7 @@ class main extends \member_base {
 	 * $newForm
 	 *
 	 */
-	private function getPageData($mpid, $act, $ek, $openid, $page, $newForm = false) {
+	private function getPageData($mpid, $act, $rid, $ek, $openid, $page, $newForm = false) {
 		$modelEnroll = $this->model('app\enroll');
 		$openedek = $ek;
 		$record = null;
@@ -349,18 +349,17 @@ class main extends \member_base {
 				/**
 				 * 获得最后一条登记数据
 				 */
-				$enrollList = $modelEnroll->getRecordList($mpid, $act->id, $openid);
+				$enrollList = $modelEnroll->getRecordList($mpid, $act->id, $openid, $rid);
 				if (!empty($enrollList)) {
 					$record = $enrollList[0];
 					$openedek = $record->enroll_key;
 					$record->data = $modelEnroll->getRecordData($openedek);
 				}
 			}
-		} else
-		/**
-		 * 打开指定的登记记录
-		 */
-		{
+		} else {
+			/**
+			 * 打开指定的登记记录
+			 */
 			$record = $modelEnroll->getRecordById($openedek);
 		}
 
