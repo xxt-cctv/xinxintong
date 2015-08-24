@@ -30,7 +30,7 @@ app.controller('ctrl', ['$scope', '$http', '$location', '$sce', function($scope,
         data.body = $sce.trustAsHtml(data.body);
         $scope.incident = data;
         window.xxt.share.set(title, location.href, data.summary, data.pic);
-        $http.post('/rest/mi/matter/logAccess?mpid=9f4335dc25ab0a83c04e066793cba286&id=' + id + '&title=' + data.title + '&type=kzrl-incident', {
+        $http.post('/rest/mi/matter/logAccess?mpid=9f4335dc25ab0a83c04e066793cba286&id=' + id + '&title=' + data.title + '&type=article', {
             search: location.search.replace('?', ''),
             referer: document.referrer
         });
