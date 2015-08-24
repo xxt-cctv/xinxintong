@@ -8,6 +8,10 @@ app.controller('ctrl', ['$scope', '$http', '$location', function ($scope, $http,
 	$scope.openOne = function (incident) {
 		location.href = '/views/default/cus/cctv/kzrl/incident.html?id=' + incident.id;
 	};
+	$http.post('/rest/mi/matter/logAccess?mpid=9f4335dc25ab0a83c04e066793cba286&id=' + id + '&type=kzrl-nearby', {
+        search: location.search.replace('?', ''),
+        referer: document.referrer
+    });
 	$http.get('/rest/cus/cctv/kzrl/get?articleid=' + id).success(function (rsp) {
 		$scope.center = rsp.data;
 	});

@@ -63,13 +63,17 @@ app.controller('ctrl', function ($scope, $timeout, $http, $q, $location) {
     window.xxt.share.options.logger = function (shareto) {
         var url = "/rest/mi/matter/logShare";
         url += "?shareid=" + (new Date()).getTime();
-        url += "&mpid=ad483481fb907d53d74130cd88e11d86";
+        url += "&mpid=9f4335dc25ab0a83c04e066793cba286";
         url += "&id=kzrl-today";
         url += "&type=other";
         url += "&title=kzrl-today";
         url += "&shareto=" + shareto;
         $http.get(url);
     };
+    $http.post('/rest/mi/matter/logAccess?mpid=9f4335dc25ab0a83c04e066793cba286&id=kzrl-today&type=article&title=kzrl-today', {
+        search: location.search.replace('?', ''),
+        referer: document.referrer
+    });
     $http.get(todayUrl).success(function (rsp) {
         var i, j, one, summary;
         window.xxt.share.set("用时间凝固记忆 用距离丈量历史", location.href, "【抗战日历】距离抗战胜利纪念日阅兵还有" + $scope.date.offsetDays + "天", "http://" + location.host + "/views/default/cus/cctv/kzrl/static/img/sp.jpg");
