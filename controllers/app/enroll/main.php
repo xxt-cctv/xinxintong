@@ -1,18 +1,11 @@
 <?php
 namespace app\enroll;
 
-include_once dirname(dirname(dirname(__FILE__))) . '/member_base.php';
+include_once dirname(__FILE__) . '/base.php';
 /**
  * 登记活动
  */
-class main extends \member_base {
-
-	public function get_access_rule() {
-		$rule_action['rule_type'] = 'black';
-		$rule_action['actions'] = array();
-
-		return $rule_action;
-	}
+class main extends base {
 	/**
 	 * 获得当前访问用户的信息
 	 *
@@ -283,7 +276,7 @@ class main extends \member_base {
 	/**
 	 * 返回活动数据
 	 */
-	public function get_action($mpid, $aid, $page, $ek = null) {
+	public function get_action($mpid, $aid, $rid = null, $page, $ek = null) {
 		$params = array();
 
 		$enrollModel = $this->model('app\enroll');
@@ -320,7 +313,7 @@ class main extends \member_base {
 		/**
 		 * 设置页面登记数据
 		 */
-		list($openedek, $record, $statdata) = $this->getPageData($mpid, $act, $ek, $user->openid, $page, $newForm);
+		list($openedek, $record, $statdata) = $this->getPageData($mpid, $act, $rid, $ek, $user->openid, $page, $newForm);
 		$params['enrollKey'] = $openedek;
 		$params['record'] = $record;
 		$params['statdata'] = $statdata;
@@ -337,7 +330,7 @@ class main extends \member_base {
 	 * $newForm
 	 *
 	 */
-	private function getPageData($mpid, $act, $ek, $openid, $page, $newForm = false) {
+	private function getPageData($mpid, $act, $rid, $ek, $openid, $page, $newForm = false) {
 		$modelEnroll = $this->model('app\enroll');
 		$openedek = $ek;
 		$record = null;
@@ -349,18 +342,17 @@ class main extends \member_base {
 				/**
 				 * 获得最后一条登记数据
 				 */
-				$enrollList = $modelEnroll->getRecordList($mpid, $act->id, $openid);
+				$enrollList = $modelEnroll->getRecordList($mpid, $act->id, $openid, $rid);
 				if (!empty($enrollList)) {
 					$record = $enrollList[0];
 					$openedek = $record->enroll_key;
 					$record->data = $modelEnroll->getRecordData($openedek);
 				}
 			}
-		} else
-		/**
-		 * 打开指定的登记记录
-		 */
-		{
+		} else {
+			/**
+			 * 打开指定的登记记录
+			 */
 			$record = $modelEnroll->getRecordById($openedek);
 		}
 
@@ -384,178 +376,6 @@ class main extends \member_base {
 		$statdata = $modelEnroll->getStat($act->id);
 
 		return array($openedek, $record, $statdata);
-	}
-	/**
-	 *
-	 */
-	protected function canAccessObj($mpid, $aid, $member, $authapis, $act) {
-		return $this->model('acl')->canAccessMatter($mpid, 'enroll', $aid, $member, $authapis);
-	}
-	/**
-	 * 报名登记页，记录登记信息
-	 *
-	 * $mpid
-	 * $aid
-	 * $ek enrollKey 如果要更新之前已经提交的数据，需要指定
-	 */
-	public function submit_action($mpid, $aid, $ek = null) {
-		empty($mpid) && die('mpid is empty.');
-		empty($aid) && die('aid is empty.');
-
-		$model = $this->model('app\enroll');
-		$act = $model->byId($aid);
-		/**
-		 * 当前访问用户的基本信息
-		 */
-		$user = $this->getUser($mpid,
-			array(
-				'authapis' => $act->authapis,
-				'matter' => $act,
-				'verbose' => array('member' => 'Y', 'fan' => 'Y'),
-			)
-		);
-		if (empty($user->fan)) {
-			/**
-			 * 非关注用户
-			 */
-			$rule = $act->entry_rule->nonfan->enroll;
-		} else {
-			if (isset($user->fan)) {
-				/**
-				 * 关注用户
-				 */
-				$rule = $act->entry_rule->fan->enroll;
-			}
-			if (isset($user->membersInAcl) && !empty($user->members)) {
-				/**
-				 * 认证用户不在白名单中
-				 */
-				$rule = $act->entry_rule->member_outacl->enroll;
-			}
-			if (!empty($user->membersInAcl) || (!isset($user->membersInAcl) && !empty($user->members))) {
-				/**
-				 * 白名单中的认证用户，或者，不限制白名单的认证用户，允许登记
-				 */
-				$rule = 'Y';
-			}
-		}
-		switch ($rule) {
-		case '$authapi_outacl':
-			$actAuthapis = explode(',', $act->authapis);
-			$this->gotoOutAcl($mpid, $actAuthapis[0]);
-			break;
-		case '$mp_follow':
-			$this->askFollow($mpid, $user->openid);
-			break;
-		case '$authapi_auth':
-			$this->gotoAuth($mpid, $act->authapis, $user->openid, false);
-			break;
-		}
-		/**
-		 * 处理提交数据
-		 */
-		$posted = $this->getPostJson();
-		$mid = '';
-		!empty($user->membersInAcl) && $mid = $user->membersInAcl[0]->mid;
-		/**
-		 * 包含用户身份信息
-		 */
-		if (isset($posted->member) && isset($posted->member->authid)) {
-			$rst = $this->submitMember($mpid, $posted, $user->fan->fid, $mid);
-			if ($rst[0] === false) {
-				return new \ParameterError($rst[1]);
-			}
-
-		}
-		/**
-		 * 处理提交数据
-		 */
-		if (!empty($ek)) {
-			/**
-			 * 已经登记，更新原先提交的数据
-			 */
-			$this->model()->update(
-				'xxt_enroll_record',
-				array('enroll_at' => time()),
-				"enroll_key='$ek'"
-			);
-			/**
-			 * 重新插入新提交的数据
-			 */
-			$rst = $model->setRollData($mpid, $aid, $ek, $posted, false);
-		} else {
-			/**
-			 * 插入报名数据
-			 */
-			$ek = $model->enroll($mpid, $act, $user->openid, $user->vid, $mid);
-			/**
-			 * 处理自定义信息
-			 */
-			$rst = $model->setRollData($mpid, $aid, $ek, $posted);
-		}
-		if (false === $rst[0]) {
-			return new ResponseError($rst[1]);
-		}
-
-		/**
-		 * 通知登记活动的管理员
-		 */
-		if (!empty($act->receiver_page)) {
-			$admins = \TMS_APP::model('acl')->enrollReceivers($mpid, $aid);
-			if (false !== ($key = array_search($user->openid, $admins))) {
-				unset($admins[$key]);
-			}
-
-			if (!empty($admins)) {
-				$url = 'http://' . $_SERVER['HTTP_HOST'] . "/rest/app/enroll?mpid=$mpid&aid=$act->id&ek=$ek&page=$act->receiver_page";
-				$txt = urlencode("【" . $act->title . "】有新登记数据，");
-				$txt .= "<a href=\"$url\">";
-				$txt .= urlencode("请处理");
-				$txt .= "</a>";
-				$message = array(
-					"msgtype" => "text",
-					"text" => array(
-						"content" => $txt,
-					),
-				);
-				$mpa = $this->model('mp\mpaccount')->getApis($mpid);
-				if ($mpa->mpsrc === 'qy') {
-					$message['touser'] = implode('|', $admins);
-					$this->send_to_qyuser($mpid, $message);
-				} else if ($mpa->mpsrc === 'yx' && $mpa->yx_p2p === 'Y') {
-					$this->send_to_yxuser_byp2p($mpid, $message, $admins);
-				} else {
-					foreach ($admins as $admin) {
-						$this->send_to_user($mpid, $admin, $message);
-					}
-
-				}
-			}
-		}
-
-		return new \ResponseData($ek);
-	}
-	/**
-	 * 提交信息中包含的用户身份信息
-	 */
-	private function submitMember($mpid, $posted, $fid) {
-		/**
-		 * 处理用户认证信息
-		 */
-		$member = $posted->member;
-		//unset($posted->member);
-		$authid = $member->authid;
-		unset($member->authid);
-		$memberModel = $this->model('user/member');
-
-		if ($existentMember = $memberModel->byFanid($fid, 'mid', $authid)) {
-			$rst = $memberModel->modify($mpid, $authid, $existentMember->mid, $member);
-		} else {
-			$rst = $memberModel->create2($mpid, $authid, $fid, $member);
-		}
-		$member->authid = $authid;
-
-		return $rst;
 	}
 	/**
 	 * 登记记录点赞
