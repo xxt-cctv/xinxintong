@@ -186,7 +186,7 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
         window.shareCounter++;
         window.onshare && window.onshare(window.shareCounter);
     };
-    if (/MicroMessenger/i.test(navigator.userAgent)) {
+    if (/MicroMessenger/i.test(navigator.userAgent) && window.signPackage !== undefined) {
         signPackage.jsApiList = ['hideOptionMenu', 'showOptionMenu', 'closeWindow', 'chooseImage', 'uploadImage', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation'];
         signPackage.debug = false;
         wx.config(signPackage);
@@ -321,16 +321,17 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
         console.log('progress', r.progress());
         var phase = $scope.$root.$$phase;
         if (phase === '$digest' || phase === '$apply') {
-            $scope.progressOfUploadFile = Math.ceil(r.progress()*100);
+            $scope.progressOfUploadFile = Math.ceil(r.progress() * 100);
         } else {
             $scope.$apply(function() {
-                $scope.progressOfUploadFile = Math.ceil(r.progress()*100);
+                $scope.progressOfUploadFile = Math.ceil(r.progress() * 100);
             });
         }
     });
-    $scope.chooseFile = function(fileFieldName) {
+    $scope.chooseFile = function(fileFieldName, count, accept) {
         var ele = document.createElement('input');
         ele.setAttribute('type', 'file');
+        accept !== undefined && ele.setAttribute('accept', accept);
         ele.addEventListener('change', function(evt) {
             var i, cnt, f;
             cnt = evt.target.files.length;
@@ -363,8 +364,8 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
         if (r.files && r.files.length) {
             r.on('complete', function() {
                 console.log('resumable complete.');
-                //r.files = [];
-                //$scope.submit(event, nextAction);
+                r.files = [];
+                $scope.submit(event, nextAction);
             });
             r.upload();
             return;
