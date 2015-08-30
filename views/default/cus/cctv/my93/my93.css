@@ -1,0 +1,19 @@
+.ng-cloak{display:none}
+*{box-sizing:border-box;font-family:"Heiti SC","SimHei","Microsoft YaHei";}
+html,body{height:100%;}
+body{font-family:Microsoft Yahei,Arial}
+body{position:relative;padding-bottom:120px;}
+body{background:#fdfdfd no-repeat;background-size:100%;}
+ul{list-style:none;padding:0}
+.content-box{margin-left:10px;margin-right:10px;text-indent:2em;color:#381501;margin-top:45%;}
+.btn,.list-group-item{border:0;}
+.btn-box{display:flex;}
+.btn-box ul{margin:auto;text-align:center;}
+ul.list-group li.img-picker button img,ul.list-group li.file-picker button img{width:90px;}
+.type-box{font-size:18px;text-align:center;font-size:18px;}
+.num-box{margin:10px;background:url('./button.png') no-repeat;background-size:100% auto;height:30px;line-height:30px;text-align:center;color:#fff;margin-top:30px;font-size:13px;}
+.list-group-item button{color:#a46b07;font-size:16px;}
+.progressOfUploadFile{line-height:30px;text-align:center;}
+.btn{padding:6px 0px;}
+.file-picker{padding:10px 15px 10px 5px}
+.footer-box{color:#a29f9f;text-align:center;}

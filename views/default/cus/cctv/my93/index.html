@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width,user-scalable=no,initial-scale=1.0" name="viewport">
+        <base href=".">
+        <title>我的胜利日</title>
+        <link href="http://xxt.ctsi.com.cn/static/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="./my93.css">
+    </head>
+    <body ng-app="formApp" ng-controller="formCtrl" ng-cloak class="ng-cloak">
+        <div class="container">
+            <div class="row">
+                <div class="content-box">
+                    历史上从来没有一种尊严不需要代价，先辈血与泪的付出换来了今天的和平。铭记历史，缅怀先烈，胜利属于每一位中华儿女。拿起你的手机，一张照片、一段视频，通过你的视角共同记录下我们的胜利日。
+                </div>
+                <div class="num-box">
+                    已经有<span ng-bind="vcount"></span>位上传了#我的胜利日#视频或图片
+                </div>
+                <p class="type-box">
+                    请选择你要上传的文件类型
+                </p>
+                <p class="progressOfUploadFile bg-primary" ng-show="progressOfUploadFile">已经成功上传了<span ng-bind="progressOfUploadFile"></span></p>
+                <div class="row">
+                    <div wrap="input" class="form-group form-group-lg col-xs-5 col-xs-offset-1 btn-box">
+                        <ul class="list-group" name="c1440688148146">
+                            <!--
+                            <li wrap="file" ng-repeat="file in data.c1440688148146" class="list-group-item" title="图片"></li>
+                            -->
+                            <li class="list-group-item file-picker"><button class="btn btn-default" ng-click="chooseFile('c1440688148146',1,'image/*')"><img src="./pic_btn.png"><br>图片</button></li>
+                        </ul>
+                    </div>
+                    <div wrap="input" class="form-group form-group-lg col-xs-5">
+                        <ul class="list-group" name="c1440688148146">
+                            <!--
+                            <li wrap="file" ng-repeat="file in data.c1440688148146" class="list-group-item" title="视频"><span class="file-name" ng-bind="file.name"></span></li>
+                            -->
+                            <li class="list-group-item file-picker"><button class="btn btn-default" ng-click="chooseFile('c1440688148146',1,'video/*')"><img src="./video_btn.png"><br>视频</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-box">
+                    本页面由央视新闻提供
+                </div>
+            </div>
+        </div>
+        <script src="http://xxt.ctsi.com.cn/static/js/jquery.min.js"></script>
+        <script src="http://xxt.ctsi.com.cn/static/js/angular.min.js"></script>
+        <script src="http://xxt.ctsi.com.cn/static/js/resumable.js"></script>
+        <script src="http://yaotv.qq.com/shake_tv/include/js/jsapi_share.js"></script>
+        <script src="./page.js"></script>
+    </body>
+</html>
