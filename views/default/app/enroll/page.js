@@ -302,35 +302,38 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
             $('#pickImageFrom').hide();
         }
         window.xxt.image.choose($q.defer(), from).then(function(imgs) {
-            var i, j, img;
+            var phase, i, j, img;
+            phase = $scope.$root.$$phase;
+            if (phase === '$digest' || phase === '$apply') {
+                $scope.data[imgFieldName] = $scope.data[imgFieldName].concat(imgs);
+            } else {
+                $scope.$apply(function() {
+                    $scope.data[imgFieldName] = $scope.data[imgFieldName].concat(imgs);
+                });
+            }
             for (i = 0, j = imgs.length; i < j; i++) {
                 img = imgs[i];
-                var phase = $scope.$root.$$phase;
-                if (phase === '$digest' || phase === '$apply') {
-                    $scope.data[imgFieldName].push(img);
-                } else {
-                    $scope.$apply(function() {
-                        $scope.data[imgFieldName].push(img);
-                    });
-                }
                 (window.wx !== undefined) && $('ul[name="' + imgFieldName + '"] li:nth-last-child(2) img').attr('src', img.imgSrc);
             }
+            $scope.$broadcast('xxt.enroll.image.choose.done', imgFieldName);
         });
     };
     $scope.progressOfUploadFile = 0;
     var r = new Resumable({
         target: '/rest/app/enroll/record/uploadFile?mpid=' + $scope.mpid + '&aid=' + $scope.aid,
         testChunks: false,
-        chunkSize: 256 * 1024
+        chunkSize: 512 * 1024
     });
     r.on('progress', function() {
-        console.log('progress', r.progress());
+        var phase, p;
+        p = r.progress();
+        console.log('progress', p);
         var phase = $scope.$root.$$phase;
         if (phase === '$digest' || phase === '$apply') {
-            $scope.progressOfUploadFile = Math.ceil(r.progress() * 100);
+            $scope.progressOfUploadFile = Math.ceil(p * 100);
         } else {
             $scope.$apply(function() {
-                $scope.progressOfUploadFile = Math.ceil(r.progress() * 100);
+                $scope.progressOfUploadFile = Math.ceil(p * 100);
             });
         }
     });
@@ -343,7 +346,6 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
             cnt = evt.target.files.length;
             for (i = 0; i < cnt; i++) {
                 f = evt.target.files[i];
-                console.log('file', f);
                 r.addFile(f);
                 $scope.data[fileFieldName] === undefined && ($scope.data[fileFieldName] = []);
                 $scope.data[fileFieldName].push({
@@ -355,6 +357,7 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
                 });
             }
             $scope.$apply('data.' + fileFieldName);
+            $scope.$broadcast('xxt.enroll.file.choose.done', fileFieldName);
         }, false);
         ele.click();
     };
@@ -370,7 +373,15 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
         if (r.files && r.files.length) {
             r.on('complete', function() {
                 console.log('resumable complete.');
-                r.files = [];
+                var phase = $scope.$root.$$phase;
+                if (phase === '$digest' || phase === '$apply') {
+                    $scope.progressOfUploadFile = '完成';
+                } else {
+                    $scope.$apply(function() {
+                        $scope.progressOfUploadFile = '完成';
+                    });
+                }
+                r.cancel();
                 $scope.submit(event, nextAction);
             });
             r.upload();
@@ -574,11 +585,10 @@ formApp.controller('formCtrl', ['$location', '$scope', '$http', '$timeout', '$q'
                 });
             }
             $scope.params = params;
-            $scope.ready = true;
             if ($scope.requireRecordList) {
                 $scope.Record.nextPage($scope.requireRecordList);
             }
-            console.log('page ready', $scope.params);
+            $scope.$broadcast('xxt.enroll.ready', params);
         });
     });
 }]);
