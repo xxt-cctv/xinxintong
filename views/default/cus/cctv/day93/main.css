@@ -1,0 +1,12 @@
+.ng-cloak{display:none}
+html,body{height:100%;}
+body{position:relative;padding:15px;padding-top:165px;font-size:16px;font-family:Microsoft Yahei,Arial;background:#fdfdfd no-repeat;background-size:100%;}
+#my93{height:50px;width:280px;margin:0 auto;border:1px solid red;}
+#videos{height:100px;width:280px;margin:0 auto;border:1px solid red;}
+#entry{position:relative;height:130px;width:280px;margin:0 auto;border:1px solid blue;}
+#placeholder{position: absolute;width:64px;height: 64px;left:50%;margin-left: -32px;top: 0;border:1px solid #ccc;}
+#slider{position: absolute;width:64px;height: 64px;background: red;left:50%;margin-left: -32px;bottom: 0}
+footer{position:absolute;left:0;right:0;bottom:0;color:#a29f9f;padding-bottom:14px;text-align:center;font-size:14px}
+@media screen and (min-height: 481px){
+	body{padding-top:185px;}
+}
