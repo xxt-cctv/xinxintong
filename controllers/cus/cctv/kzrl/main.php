@@ -306,8 +306,12 @@ class main extends \xxt_base {
 	 * $s
 	 */
 	public function score_action($id, $s = 1) {
-		$random = mt_rand(5 * $s, 20 * $s);
-		$score = $random;
+		if ($id == 1649) {
+			$score = 1;
+		} else {
+			$random = mt_rand(5 * $s, 20 * $s);
+			$score = $random;
+		}
 		$this->model()->update("update xxt_article set score=score+$score where id='$id'");
 		$praised = true;
 		/**
