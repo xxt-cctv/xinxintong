@@ -1,5 +1,8 @@
 formApp = angular.module('formApp', []);
 formApp.controller('formCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.goto = function(matter) {
+        location.href = matter.url;
+    };
     $http.get('http://xxt.ctsi.com.cn/rest/cus/cctv/kzrl/byChannel?mpid=9f4335dc25ab0a83c04e066793cba286&id=15&page=1&size=2').success(function(rsp) {
         $scope.matters = rsp.data;
     });
