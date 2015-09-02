@@ -5,6 +5,7 @@ if (/MicroMessenger/i.test(navigator.userAgent)) {
 }
 formApp = angular.module('formApp', []);
 formApp.controller('formCtrl', ['$scope', '$http', function($scope, $http) {
+    window.xxt.share.options.descAsTitle = true;
     window.xxt.share.options.logger = function(shareto) {
         var url = "/rest/mi/matter/logShare";
         url += "?shareid=" + (new Date()).getTime();

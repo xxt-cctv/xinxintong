@@ -8,9 +8,9 @@ formApp.controller('formCtrl', ['$scope', '$http', function($scope, $http) {
         if (window.shaketv) {
             var shareData;
             shareData = {
-                title: "我的胜利日",
+                title: "我是九三胜利日阅兵的第" + $scope.vcount + "位参与者，铭记历史才能烛照未来！",
                 link: location.href,
-                desc: "我是九三胜利日阅兵的第" + $scope.vcount + "位参与者，铭记历史才能烛照未来！",
+                desc: "我的胜利日",
                 pic: 'http://xxt.ctsi.com.cn/kcfinder/upload/ad483481fb907d53d74130cd88e11d86/%E5%9B%BE%E7%89%87/%E6%88%91%E7%9A%84%E8%83%9C%E5%88%A9%E6%97%A5/62894570824539309.jpg'
             };
             window.shaketv.wxShare(shareData.pic, shareData.title, shareData.desc, shareData.link);
