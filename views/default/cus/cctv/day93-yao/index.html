@@ -5,7 +5,7 @@
         <meta content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1" name="viewport">
         <base href=".">
         <title>我的胜利日</title>
-        <link href="http://xxt.ctsi.com.cn/static/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://libs.useso.com/js/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="./main.css">
     </head>
     <body ng-app="formApp" ng-controller="formCtrl" ng-cloak class="ng-cloak">
@@ -13,12 +13,20 @@
             <div class="row">
                 <div class="col-xs-12"></div>
                 <div class="col-xs-12">
-                    <div class="media" ng-repeat="matter in matters" ng-click="goto(matter)">
+                    <div class="media" ng-click="goto('http://app.cntv.cn/special/2015yuebing/vg/index.html')">
                         <div class="media-left">
                             <img src="./play-btn.png" style="width:40px;"/>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="{{matter.url}}"></a>{{matter.title}}</h4>
+                            <h4 class="media-heading">V观大阅兵 换一个视角看阅兵</h4>
+                        </div>
+                    </div>
+                    <div class="media" ng-click="goto('http://xxt.ctsi.com.cn/views/default/cus/cctv/my93/index.html')">
+                        <div class="media-left">
+                            <img src="./play-btn.png" style="width:40px;"/>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">我的胜利日 用我的视角拍摄大阅兵</h4>
                         </div>
                     </div>
                 </div>
@@ -37,9 +45,10 @@
         <footer>
             本页面由央视新闻提供
         </footer>
-        <script src="http://xxt.ctsi.com.cn/static/js/jquery.min.js"></script>
+        <script src="http://yaotv.qq.com/shake_tv/include/js/lib/jquery.1.9.1.min.js"></script>
         <script src="http://xxt.ctsi.com.cn/static/js/hammer.min.js"></script>
         <script src="http://xxt.ctsi.com.cn/static/js/angular.min.js"></script>
+        <script src="http://libs.useso.com/js/angular.js/1.3.0-beta.9/angular.min.js"></script>
         <script src="http://yaotv.qq.com/shake_tv/include/js/jsapi_share.js"></script>
         <script src="./main.js"></script>
     </body>
